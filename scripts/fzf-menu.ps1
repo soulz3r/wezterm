@@ -18,7 +18,9 @@ try {
 
     $rows = foreach ($item in $items) {
         if ($null -ne $item.label -and $null -ne $item.id) {
-            "$($item.label)$tab$($item.id)"
+            $label = [string]$item.label
+            $label = $label -replace "[`t`r`n]", " "
+            "$label$tab$($item.id)"
         }
     }
 
