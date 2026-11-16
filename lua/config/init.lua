@@ -42,6 +42,7 @@ config.visual_bell = {
 	fade_in_duration_ms = 75,
 	fade_out_function = "EaseOut",
 	fade_out_duration_ms = 150,
+	target = "CursorColor",
 }
 config.mouse_bindings = require("config.mouse")
 
