@@ -100,6 +100,9 @@ function M.build(window, mode)
 		{ "Restore default color scheme", "scheme:default" },
 		{ "Choose font", "font:picker" },
 		{ "Toggle background opacity", "appearance:opacity" },
+		{ "Toggle tab bar", "appearance:tab-bar" },
+		{ "Toggle scrollbar", "appearance:scrollbar" },
+		{ "Toggle cursor blink", "appearance:cursor" },
 	}
 	for _, entry in ipairs(appearance_items) do
 		item(items, entry[1], entry[2], "Appearance")
