@@ -10,7 +10,7 @@ This document separates WezTerm's capabilities by how they should be controlled.
 - Search: native search, scrollback search and pattern-based Quick Select
 - Clipboard and scrollback operations
 - Font size, font presets, color schemes and background opacity
-- Workspace switching, creation and rename
+- Project discovery from the configured project root and persistent project workspaces\n- Workspace switching, creation and rename
 - Fullscreen and debug overlay
 
 The action catalog is kept in lua/features/action_registry.lua. Dispatch and fzf lifecycle management live in lua/features/action_menu.lua.
