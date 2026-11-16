@@ -9,12 +9,6 @@ local function item(items, label, id, category)
 	})
 end
 
-local function action(items, label, id, category, action_name, args)
-	if wezterm.has_action(action_name) then
-		item(items, label, id, category)
-	end
-end
-
 function M.build(window, mode)
 	local items = {}
 
@@ -126,6 +120,21 @@ function M.build(window, mode)
 	end
 	item(items, "Create workspace", "workspace:create", "Workspaces")
 	item(items, "Rename current workspace", "workspace:rename", "Workspaces")
+
+	local optional_actions = {
+		["pane:rotate-clockwise"] = "RotatePanes",
+		["pane:rotate-counter-clockwise"] = "RotatePanes",
+		["pane:resize:left"] = "AdjustPaneSize",
+		["pane:resize:right"] = "AdjustPaneSize",
+		["pane:resize:up"] = "AdjustPaneSize",
+		["pane:resize:down"] = "AdjustPaneSize",
+	}
+	for index = #items, 1, -1 do
+		local required = optional_actions[items[index].id]
+		if required and not wezterm.has_action(required) then
+			table.remove(items, index)
+		end
+	end
 
 	return items
 end
