@@ -30,6 +30,8 @@ function M.build(window, mode)
 		return items
 	end
 
+	item(items, "Open project", "project:picker", "Projects")
+
 	local tab_items = {
 		{ "New tab", "tab:new" },
 		{ "Previous tab", "tab:previous" },
@@ -145,6 +147,7 @@ end
 function M.cheatsheet()
 	local rows = {
 		{ "Ctrl+Shift+P", "Open complete command menu", "menu" },
+		{ "Alt+Shift+P", "Open project picker", "project:picker" },
 		{ "Alt+Shift+L", "Open shell picker", "shell-picker" },
 		{ "Ctrl+Shift+F", "Search scrollback with fzf", "search:fzf" },
 		{ "Ctrl+Shift+Space", "Quick Select from scrollback", "search:quick" },
