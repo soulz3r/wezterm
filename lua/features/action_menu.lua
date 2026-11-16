@@ -227,7 +227,7 @@ local function dispatch(window, pane, id, options)
 	end
 
 	if id:match("^scheme:apply:") then
-		set_override(window, "color_scheme", id:sub(13))
+		set_override(window, "color_scheme", id:sub(14))
 		return
 	elseif id == "scheme:default" then
 		set_override(window, "color_scheme", DEFAULT_SCHEME)
