@@ -24,7 +24,6 @@ local required_actions = {
 	"CopyTo",
 	"DecreaseFontSize",
 	"DisableDefaultAssignment",
-	"EmitEvent",
 	"IncreaseFontSize",
 	"MoveTabRelative",
 	"PaneSelect",
