@@ -2,9 +2,8 @@ $ErrorActionPreference = "Stop"
 
 try {
     $fzf = Get-Command "fzf.exe" -ErrorAction Stop
-    $items = $env:WEZTERM_MENU_ITEMS | ConvertFrom-Json
+    $items = Get-Content -LiteralPath $env:WEZTERM_MENU_FILE -Raw | ConvertFrom-Json
     $tab = [char]9
-
     $rows = foreach ($item in $items) {
         "$($item.label)$tab$($item.id)"
     }
@@ -21,6 +20,8 @@ try {
         "--delimiter", "$tab",
         "--with-nth", "1",
         "--no-multi",
+        "--cycle",
+        "--ansi",
         "--color", "fg:#d3c6aa,bg:#2d353b,hl:#a7c080,fg+:#d3c6aa,bg+:#3d484d,hl+:#a7c080,info:#a7c080,prompt:#e69875,pointer:#e67e80,marker:#a7c080,border:#475258"
     )
 
