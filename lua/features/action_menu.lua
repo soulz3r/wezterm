@@ -143,6 +143,45 @@ local function set_override(window, key, value)
 	window:set_config_overrides(overrides)
 end
 
+local function project_items(options)
+	local entries, err = pcall(wezterm.read_dir, options.projects)
+	if not entries then
+		error("Cannot read project directory " .. options.projects .. ": " .. tostring(err))
+	end
+
+	local items = {}
+	for _, path in ipairs(err) do
+		path = path:gsub("[/\\\\]+$", "")
+		local name = path:match("([^/\\\\]+)$")
+		if name and name:sub(1, 1) ~= "." then
+			local is_directory = pcall(wezterm.read_dir, path)
+			if is_directory then
+				table.insert(items, {
+					label = "Projects / " .. name,
+					id = "project:open:" .. path,
+				})
+			end
+		end
+	end
+
+	table.sort(items, function(a, b) return a.label:lower() < b.label:lower() end)
+	return items
+end
+
+local function open_projects(window, pane, options)
+	local ok, items = pcall(project_items, options)
+	if not ok then
+		notify(window, "Project picker", tostring(items), 4000)
+		wezterm.log_error("Project discovery failed: " .. tostring(items))
+		return
+	end
+	if #items == 0 then
+		notify(window, "Project picker", "No project directories found in " .. options.projects)
+		return
+	end
+	open(window, pane, items, options)
+end
+
 local function open_schemes(window, pane, options)
 	local schemes = wezterm.get_builtin_color_schemes()
 	local names = {}
@@ -189,6 +228,24 @@ local function dispatch(window, pane, id, options)
 
 	if id == "menu" then
 		open(window, pane, registry.build(window, "all"), options)
+		return
+	elseif id == "project:picker" then
+		open_projects(window, pane, options)
+		return
+	elseif id:match("^project:open:") then
+		local path = id:sub(14)
+		local name = path:gsub("[/\\\\]+$", ""):match("([^/\\\\]+)$")
+		if not name then
+			notify(window, "Project picker", "Invalid project path.")
+			return
+		end
+		window:perform_action(act.SwitchToWorkspace({
+			name = "project-" .. name,
+			spawn = {
+				cwd = path,
+				args = { "pwsh.exe", "-NoLogo" },
+			},
+		}), pane)
 		return
 	elseif id == "shell-picker" then
 		open(window, pane, registry.build(window, "shells"), options)
@@ -363,6 +420,7 @@ function M.setup(config, options)
 	local keys = {
 		{ key = "X", mods = "CTRL|SHIFT", action = act.DisableDefaultAssignment },
 		{ key = "P", mods = "CTRL|SHIFT", action = callback(function(w, p) open(w, p, registry.build(w, "all"), options) end) },
+		{ key = "P", mods = "ALT|SHIFT", action = callback(function(w, p) open_projects(w, p, options) end) },
 		{ key = "L", mods = "ALT|SHIFT", action = callback(function(w, p) open(w, p, registry.build(w, "shells"), options) end) },
 		{ key = "F", mods = "CTRL|SHIFT", action = callback(function(w, p) open_scrollback(w, p, options, false) end) },
 		{ key = "Space", mods = "CTRL|SHIFT", action = callback(function(w, p) open_scrollback(w, p, options, true) end) },
