@@ -5,7 +5,7 @@ local action_menu_path = wezterm.config_dir .. "/scripts/action-menu.ps1"
 local wezterm_exe = wezterm.executable_dir .. "\\wezterm.exe"
 
 local function open_action_menu(window, pane, mode)
-	window:spawn_tab({
+	window:mux_window():spawn_tab({
 		args = {
 			"pwsh.exe",
 			"-NoLogo",
