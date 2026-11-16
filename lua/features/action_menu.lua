@@ -12,15 +12,72 @@ local shells = {
 
 local default_scheme = "Everforest Dark (Gogh)"
 
+local required_actions = {
+	"ActivateCopyMode",
+	"ActivatePaneDirection",
+	"ActivateTab",
+	"ActivateTabRelative",
+	"ClearScrollback",
+	"ClearSelection",
+	"CloseCurrentPane",
+	"CloseCurrentTab",
+	"CopyTo",
+	"DecreaseFontSize",
+	"DisableDefaultAssignment",
+	"EmitEvent",
+	"IncreaseFontSize",
+	"MoveTabRelative",
+	"PaneSelect",
+	"PasteFrom",
+	"ReloadConfiguration",
+	"ResetFontSize",
+	"RotatePanes",
+	"ScrollByPage",
+	"ScrollToBottom",
+	"ScrollToTop",
+	"Search",
+	"ShowDebugOverlay",
+	"ShowTabNavigator",
+	"SpawnCommandInNewTab",
+	"SpawnCommandInNewWindow",
+	"SpawnTab",
+	"SplitPane",
+	"SwitchToWorkspace",
+	"ToggleFullScreen",
+	"TogglePaneZoomState",
+}
+
+local function validate_actions()
+	for _, name in ipairs(required_actions) do
+		assert(
+			wezterm.has_action(name),
+			"WezTerm does not support the required action: " .. name
+		)
+	end
+end
+
 local function add(items, label, id)
 	table.insert(items, { label = label, id = id })
 end
 
 local function write_items(items)
 	local path = os.tmpname()
-	local file = assert(io.open(path, "w"))
-	file:write(wezterm.json_encode(items))
-	file:close()
+	local file, err = io.open(path, "wb")
+	if not file then
+		error("Unable to create fzf menu data file: " .. tostring(err))
+	end
+
+	local ok, write_err = pcall(function()
+		file:write(wezterm.json_encode(items))
+		file:close()
+	end)
+
+	if not ok then
+		pcall(function() file:close() end)
+		os.remove(path)
+		error("Unable to write fzf menu data: " .. tostring(write_err))
+	end
+
 	return path
 end
 
@@ -65,7 +122,7 @@ local function add_panes(items)
 	add(items, "Panes / Select pane", "pane:select")
 end
 
-local function add_actions(items, mode)
+local function add_actions(items)
 	add(items, "Search / Search scrollback with fzf    [Ctrl+Shift+F]", "search:fzf")
 	add(items, "Search / Quick Select with fzf         [Ctrl+Shift+Space]", "search:quick")
 	add(items, "Search / Native WezTerm search", "search:native")
@@ -84,8 +141,6 @@ local function add_actions(items, mode)
 	add(items, "Appearance / Choose color scheme      [Alt+Shift+O]", "scheme:picker")
 	add(items, "Appearance / Restore default scheme", "scheme:default")
 	add(items, "Window / Toggle fullscreen             [Alt+Shift+Enter]", "window:fullscreen")
-	add(items, "Window / Toggle always on top", "window:top")
-	add(items, "Window / Toggle always on bottom", "window:bottom")
 	add(items, "Window / Maximize", "window:maximize")
 	add(items, "Window / Restore", "window:restore")
 	add(items, "Window / Show debug overlay", "debug")
@@ -97,11 +152,13 @@ end
 local function build_choices(window, mode)
 	local items = {}
 	add_shells(items, mode)
-	if mode == "shells" then return items end
+	if mode == "shells" then
+		return items
+	end
 
 	add_tabs(items, window)
 	add_panes(items)
-	add_actions(items, mode)
+	add_actions(items)
 
 	for _, workspace in ipairs(wezterm.mux.get_workspace_names()) do
 		add(items, "Workspaces / Switch to " .. workspace, "workspace:" .. workspace)
@@ -134,92 +191,139 @@ local function build_cheatsheet()
 		{ "Alt+Shift+Enter", "Toggle fullscreen", "window:fullscreen" },
 		{ "Ctrl+Shift+R", "Reload configuration", "config:reload" },
 	}
+
 	for _, row in ipairs(rows) do
 		add(items, string.format("Keymaps / %-22s / %s", row[1], row[2]), row[3])
 	end
+
 	return items
 end
 
 local function build_scrollback_results(pane, quick)
-	local text = pane:get_logical_lines_as_text(pane:get_dimensions().scrollback_rows)
+	local dimensions = pane:get_dimensions()
+	local text = pane:get_logical_lines_as_text(dimensions.scrollback_rows)
 	local results = {}
 	local seen = {}
+
 	local patterns = {
 		"https?://[%w%._~:/%?#%[%]@!$&'()*+,;=%%%-]+",
+		"%a:[/\\][%w_%.%-/\\]+",
+		"/[%w_%.%-/]+",
 		"[%w_%.%-]+/[%w_%.%-%/]+",
 		"%x%x%x%x%x%x%x%x+",
 		"%d+%.%d+%.%d+%.%d+",
 		"%d+",
 	}
+
 	local function push(value, line_number)
 		value = value:gsub("^%s+", ""):gsub("%s+$", "")
-		if value == "" then return end
+		if value == "" then
+			return
+		end
+
 		local key = value .. ":" .. line_number
-		if seen[key] then return end
+		if seen[key] then
+			return
+		end
+
 		seen[key] = true
-		add(results, string.format("%05d / %s", line_number, value), "result:" .. #results + 1)
+		add(results, string.format("%05d / %s", line_number, value), "result:" .. (#results + 1))
 		results[#results].value = value
 	end
 
 	for line_number, line in ipairs(wezterm.split_by_newlines(text)) do
 		if quick then
 			for _, pattern in ipairs(patterns) do
-				for match in line:gmatch(pattern) do push(match, line_number) end
+				for match in line:gmatch(pattern) do
+					push(match, line_number)
+				end
 			end
 		else
 			push(line, line_number)
 		end
 	end
+
 	return results
 end
 
 local function find_shell(name)
 	for _, shell in ipairs(shells) do
-		if shell.name == name then return shell end
+		if shell.name == name then
+			return shell
+		end
 	end
 end
 
-local function open(window, pane, items, options, metadata)
+local function open(window, pane, items, options)
 	local path = write_items(items)
 	local script = options.project_dir .. "/scripts/fzf-menu.ps1"
-	local _, menu_pane = window:mux_window():spawn_tab({
-		cwd = options.projects,
-		args = { "pwsh.exe", "-NoLogo", "-NoProfile", "-File", script },
-		set_environment_variables = {
-			WEZTERM_MENU_FILE = path,
-		},
-	})
+
+	local ok, _, menu_pane = pcall(function()
+		return window:mux_window():spawn_tab({
+			cwd = options.projects,
+			args = { "pwsh.exe", "-NoLogo", "-NoProfile", "-File", script },
+			set_environment_variables = {
+				WEZTERM_MENU_FILE = path,
+			},
+		})
+	end)
+
+	if not ok or not menu_pane then
+		os.remove(path)
+		window:toast_notification(
+			"WezTerm fzf",
+			"Could not start the fzf menu. Check the project path and PowerShell.",
+			nil,
+			4000
+		)
+		wezterm.log_error("Unable to spawn fzf menu tab: " .. tostring(_))
+		return
+	end
+
 	pending[menu_pane:pane_id()] = {
 		target = pane:pane_id(),
 		items = items,
 		temp_file = path,
-		metadata = metadata,
 	}
 end
 
 local function open_scrollback(window, pane, options, quick)
-	local items = build_scrollback_results(pane, quick)
+	local ok, items = pcall(build_scrollback_results, pane, quick)
+	if not ok then
+		window:toast_notification("WezTerm fzf", "Could not read scrollback: " .. tostring(items), nil, 4000)
+		wezterm.log_error("Unable to read scrollback: " .. tostring(items))
+		return
+	end
+
 	if #items == 0 then
 		window:toast_notification("WezTerm fzf", "No matching text found in scrollback.", nil, 2500)
 		return
 	end
-	open(window, pane, items, options, { result_mode = true, quick = quick })
+
+	open(window, pane, items, options)
 end
 
 local function open_schemes(window, pane, options)
 	local items = {}
 	local schemes = wezterm.get_builtin_color_schemes()
 	local names = {}
-	for name in pairs(schemes) do table.insert(names, name) end
+
+	for name in pairs(schemes) do
+		table.insert(names, name)
+	end
+
 	table.sort(names)
 	for _, name in ipairs(names) do
 		add(items, "Color schemes / " .. name, "scheme:apply:" .. name)
 	end
+
 	open(window, pane, items, options)
 end
 
 local function resolve_action(window, pane, id, options)
-	if not id or id == "cancel" then return end
+	if not id or id == "cancel" then
+		return
+	end
 
 	if id:match("^result:") then
 		return
@@ -244,14 +348,24 @@ local function resolve_action(window, pane, id, options)
 	if kind == "shell" then
 		local placement, name = rest:match("^([^:]+):(.+)$")
 		local shell = find_shell(name)
-		if not shell then return end
+		if not shell then
+			return
+		end
+
 		local command = { args = shell.args, cwd = options.projects }
 		if placement == "tab" then
 			window:perform_action(act.SpawnCommandInNewTab(command), pane)
 		elseif placement == "window" then
 			window:perform_action(act.SpawnCommandInNewWindow(command), pane)
 		elseif placement == "split" then
-			window:perform_action(act.SplitPane({ direction = "Right", size = { Percent = 50 }, command = command }), pane)
+			window:perform_action(
+				act.SplitPane({
+					direction = "Right",
+					size = { Percent = 50 },
+					command = command,
+				}),
+				pane
+			)
 		end
 		return
 	end
@@ -283,7 +397,9 @@ local function resolve_action(window, pane, id, options)
 			window:perform_action(act.MoveTabRelative(1), pane)
 		else
 			local index = tonumber(rest:match("^activate:(%d+)$"))
-			if index then window:perform_action(act.ActivateTab(index - 1), pane) end
+			if index then
+				window:perform_action(act.ActivateTab(index - 1), pane)
+			end
 		end
 		return
 	end
@@ -315,46 +431,63 @@ local function resolve_action(window, pane, id, options)
 		["font:decrease"] = act.DecreaseFontSize,
 		["font:reset"] = act.ResetFontSize,
 		["window:fullscreen"] = act.ToggleFullScreen,
-		["window:top"] = act.ToggleAlwaysOnTop,
-		["window:bottom"] = act.ToggleAlwaysOnBottom,
-		["window:maximize"] = act.EmitEvent("wezterm-maximize"),
-		["window:restore"] = act.EmitEvent("wezterm-restore"),
 		["debug"] = act.ShowDebugOverlay,
 		["config:reload"] = act.ReloadConfiguration,
 	}
 
-	if id == "docs" then
+	if id == "window:maximize" then
+		window:maximize()
+		return
+	elseif id == "window:restore" then
+		window:restore()
+		return
+	elseif id == "docs" then
 		wezterm.open_with("https://wezterm.org")
 		return
 	end
 
 	local action = actions[id]
-	if action then window:perform_action(action, pane) end
+	if action then
+		window:perform_action(action, pane)
+	end
 end
 
 function M.setup(config, options)
 	options = options or {}
+	assert(options.project_dir, "action_menu.setup requires options.project_dir")
+	assert(options.projects, "action_menu.setup requires options.projects")
 
-	wezterm.on("wezterm-maximize", function(window) window:maximize() end)
-	wezterm.on("wezterm-restore", function(window) window:restore() end)
+	validate_actions()
 
 	wezterm.on("user-var-changed", function(window, menu_pane, name, value)
-		if name ~= "WEZTERM_MENU_ACTION" then return end
+		if name ~= "WEZTERM_MENU_ACTION" then
+			return
+		end
+
 		local menu_id = menu_pane:pane_id()
 		local state = pending[menu_id]
-		if not state then return end
+		if not state then
+			return
+		end
+
 		pending[menu_id] = nil
 
 		local target_pane = wezterm.mux.get_pane(state.target)
 		window:perform_action(act.CloseCurrentTab({ confirm = false }), menu_pane)
 
-		if state.temp_file then os.remove(state.temp_file) end
-		if not target_pane or value == "cancel" then return end
+		if state.temp_file then
+			os.remove(state.temp_file)
+		end
+
+		if not target_pane or value == "cancel" then
+			return
+		end
 
 		local index = tonumber(value:match("^result:(%d+)$"))
 		if index and state.items[index] and state.items[index].value then
-			window:copy_to_clipboard(state.items[index].value, "Clipboard")
-			window:toast_notification("WezTerm fzf", "Copied: " .. state.items[index].value, nil, 1800)
+			local selected = state.items[index].value
+			window:copy_to_clipboard(selected, "Clipboard")
+			window:toast_notification("WezTerm fzf", "Copied: " .. selected, nil, 1800)
 			return
 		end
 
@@ -365,7 +498,7 @@ function M.setup(config, options)
 		end
 	end)
 
-	config.keys = {
+	local keys = {
 		{ key = "X", mods = "CTRL|SHIFT", action = act.DisableDefaultAssignment },
 		{ key = "P", mods = "CTRL|SHIFT", action = wezterm.action_callback(function(w, p) open(w, p, build_choices(w, "all"), options) end) },
 		{ key = "L", mods = "ALT|SHIFT", action = wezterm.action_callback(function(w, p) open(w, p, build_choices(w, "shells"), options) end) },
@@ -391,6 +524,11 @@ function M.setup(config, options)
 		{ key = "Z", mods = "CTRL|SHIFT", action = act.TogglePaneZoomState },
 		{ key = "R", mods = "CTRL|SHIFT", action = act.ReloadConfiguration },
 	}
+
+	config.keys = config.keys or {}
+	for _, key in ipairs(keys) do
+		table.insert(config.keys, key)
+	end
 end
 
 return M
