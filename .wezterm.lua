@@ -1,33 +1,184 @@
 local wezterm = require("wezterm")
+local act = wezterm.action
 local config = wezterm.config_builder()
 
-local action_menu_path = wezterm.config_dir .. "/scripts/action-menu.ps1"
-local wezterm_exe = wezterm.executable_dir .. "\\wezterm.exe"
+local projects = "D:\\projects\\"
 
-local function open_action_menu(window, pane, mode)
-	window:mux_window():spawn_tab({
-		args = {
-			"pwsh.exe",
-			"-NoLogo",
-			"-NoProfile",
-			"-File",
-			action_menu_path,
-			tostring(pane:pane_id()),
-			mode or "all",
-			wezterm_exe,
-		},
-		cwd = "D:\\projects\\",
-	})
+-- =========================================================
+-- Action menu
+-- =========================================================
+
+local shells = {
+	{
+		label = "PowerShell",
+		args = { "pwsh.exe", "-NoLogo" },
+	},
+	{
+		label = "Command Prompt",
+		args = { "cmd.exe" },
+	},
+	{
+		label = "Arch Linux (WSL)",
+		args = { "wsl.exe", "-d", "Arch" },
+	},
+}
+
+local function shell_choices(mode)
+	local choices = {}
+
+	for _, shell in ipairs(shells) do
+		table.insert(choices, {
+			label = "Shells  /  " .. shell.label,
+			id = "shell:" .. shell.label,
+		})
+	end
+
+	return choices
 end
+
+local function open_menu(window, pane, mode)
+	local choices = {}
+
+	local function add(label, id)
+		table.insert(choices, { label = label, id = id })
+	end
+
+	if mode == "shells" then
+		choices = shell_choices(mode)
+	else
+		add("Shells       /  PowerShell", "shell:PowerShell")
+		add("Shells       /  Command Prompt", "shell:Command Prompt")
+		add("Shells       /  Arch Linux (WSL)", "shell:Arch Linux (WSL)")
+		add("Shells       /  PowerShell in new window", "window:PowerShell")
+		add("Shells       /  Arch Linux in new window", "window:Arch Linux (WSL)")
+		add("Shells       /  PowerShell split", "split:PowerShell")
+		add("Shells       /  Command Prompt split", "split:Command Prompt")
+		add("Shells       /  Arch Linux split", "split:Arch Linux (WSL)")
+
+		add("Tabs         /  Previous tab", "tab:previous")
+		add("Tabs         /  Next tab", "tab:next")
+		add("Tabs         /  Close current tab", "tab:close")
+
+		add("Panes        /  Split right", "pane:split-right")
+		add("Panes        /  Split down", "pane:split-down")
+		add("Panes        /  Focus left", "pane:left")
+		add("Panes        /  Focus right", "pane:right")
+		add("Panes        /  Focus up", "pane:up")
+		add("Panes        /  Focus down", "pane:down")
+		add("Panes        /  Toggle zoom", "pane:zoom")
+		add("Panes        /  Close current pane", "pane:close")
+
+		add("Search       /  Search scrollback", "search")
+		add("Search       /  Quick Select", "quick-select")
+
+		add("Appearance   /  Increase font size", "font:increase")
+		add("Appearance   /  Decrease font size", "font:decrease")
+		add("Appearance   /  Reset font size", "font:reset")
+		add("Window       /  Toggle fullscreen", "window:fullscreen")
+		add("Configuration/  Reload config", "config:reload")
+	end
+
+	window:perform_action(
+		act.InputSelector({
+			title = mode == "shells" and "Shell picker" or "WezTerm",
+			choices = choices,
+			fuzzy = true,
+			description = "Type to filter  /  Enter to select  /  Esc to cancel",
+		}),
+		pane
+	)
+end
+
+local function run_menu_action(window, pane, id)
+	if not id then
+		return
+	end
+
+	if id:match("^shell:") or id:match("^window:") or id:match("^split:") then
+		local kind, name = id:match("^(%w+):(.+)$")
+		local shell
+
+		for _, candidate in ipairs(shells) do
+			if candidate.label == name then
+				shell = candidate
+				break
+			end
+		end
+
+		if not shell then
+			return
+		end
+
+		local command = {
+			args = shell.args,
+			cwd = projects,
+		}
+
+		if kind == "shell" then
+			window:perform_action(act.SpawnCommandInNewTab(command), pane)
+		elseif kind == "window" then
+			window:perform_action(act.SpawnCommandInNewWindow(command), pane)
+		elseif kind == "split" then
+			window:perform_action(
+				act.SplitPane({
+					direction = "Right",
+					size = { Percent = 50 },
+					command = command,
+				}),
+				pane
+			)
+		end
+		return
+	end
+
+	local actions = {
+		["tab:previous"] = act.ActivateTabRelative(-1),
+		["tab:next"] = act.ActivateTabRelative(1),
+		["tab:close"] = act.CloseCurrentTab({ confirm = true }),
+
+		["pane:split-right"] = act.SplitHorizontal({ domain = "CurrentPaneDomain" }),
+		["pane:split-down"] = act.SplitVertical({ domain = "CurrentPaneDomain" }),
+		["pane:left"] = act.ActivatePaneDirection("Left"),
+		["pane:right"] = act.ActivatePaneDirection("Right"),
+		["pane:up"] = act.ActivatePaneDirection("Up"),
+		["pane:down"] = act.ActivatePaneDirection("Down"),
+		["pane:zoom"] = act.TogglePaneZoomState,
+		["pane:close"] = act.CloseCurrentPane({ confirm = true }),
+
+		["search"] = act.Search({ CaseSensitiveString = "" }),
+		["quick-select"] = act.QuickSelect,
+
+		["font:increase"] = act.IncreaseFontSize,
+		["font:decrease"] = act.DecreaseFontSize,
+		["font:reset"] = act.ResetFontSize,
+		["window:fullscreen"] = act.ToggleFullScreen,
+		["config:reload"] = act.ReloadConfiguration,
+	}
+
+	local selected_action = actions[id]
+	if selected_action then
+		window:perform_action(selected_action, pane)
+	end
+end
+
+local function menu_action(mode)
+	return act.action_callback(function(window, pane)
+		open_menu(window, pane, mode)
+	end)
+end
+
+-- InputSelector is WezTerm's native fuzzy selector. It runs inside the GUI,
+-- so actions stay in Lua and no helper shell or temporary menu tab is needed.
+wezterm.on("wezterm-action-menu", function(window, pane, id)
+	run_menu_action(window, pane, id)
+end)
 
 -- =========================================================
 -- Shell
 -- =========================================================
 
 config.default_prog = { "pwsh.exe", "-NoLogo" }
-config.default_cwd = "D:\\projects\\"
-
--- Shells are launched through the fzf action menu.
+config.default_cwd = projects
 
 -- =========================================================
 -- Appearance
@@ -86,47 +237,35 @@ config.cursor_blink_rate = 500
 -- =========================================================
 
 config.mouse_bindings = {
-	-- Select text and copy to Windows clipboard.
-	-- If no selection is active, hyperlinks can still open.
 	{
 		event = { Up = { streak = 1, button = "Left" } },
 		mods = "NONE",
-		action = wezterm.action.CompleteSelectionOrOpenLinkAtMouseCursor("Clipboard"),
+		action = act.CompleteSelectionOrOpenLinkAtMouseCursor("Clipboard"),
 	},
-
-	-- Preserve hyperlink opening with Ctrl + click.
 	{
 		event = { Up = { streak = 1, button = "Left" } },
 		mods = "CTRL",
-		action = wezterm.action.OpenLinkAtMouseCursor,
+		action = act.OpenLinkAtMouseCursor,
 	},
-
-	-- Double-click: select and copy a word.
 	{
 		event = { Up = { streak = 2, button = "Left" } },
 		mods = "NONE",
-		action = wezterm.action.CompleteSelection("Clipboard"),
+		action = act.CompleteSelection("Clipboard"),
 	},
-
-	-- Triple-click: select and copy a line.
 	{
 		event = { Up = { streak = 3, button = "Left" } },
 		mods = "NONE",
-		action = wezterm.action.CompleteSelection("Clipboard"),
+		action = act.CompleteSelection("Clipboard"),
 	},
-
-	-- Complete Shift-extended selections.
 	{
 		event = { Up = { streak = 1, button = "Left" } },
 		mods = "SHIFT",
-		action = wezterm.action.CompleteSelection("Clipboard"),
+		action = act.CompleteSelection("Clipboard"),
 	},
-
-	-- Complete rectangular selections.
 	{
 		event = { Up = { streak = 1, button = "Left" } },
 		mods = "ALT",
-		action = wezterm.action.CompleteSelection("Clipboard"),
+		action = act.CompleteSelection("Clipboard"),
 	},
 }
 
@@ -135,93 +274,83 @@ config.mouse_bindings = {
 -- =========================================================
 
 config.keys = {
-	-- Disable accidental copy mode.
 	{
 		key = "X",
 		mods = "CTRL|SHIFT",
-		action = wezterm.action.DisableDefaultAssignment,
+		action = act.DisableDefaultAssignment,
 	},
-
-	-- Main fzf action menu.
 	{
 		key = "P",
 		mods = "CTRL|SHIFT",
-		action = wezterm.action_callback(function(window, pane)
-			open_action_menu(window, pane, "all")
-		end),
+		action = act.InputSelector({
+			title = "WezTerm",
+			choices = {
+				{ label = "Open action menu", id = "all" },
+				{ label = "Open shell picker", id = "shells" },
+			},
+			fuzzy = true,
+			action = wezterm.action_callback(function(window, pane, id)
+				if id then
+					open_menu(window, pane, id)
+				end
+			end),
+		}),
 	},
-
-	-- Shell-only fzf picker.
 	{
 		key = "L",
 		mods = "ALT|SHIFT",
-		action = wezterm.action_callback(function(window, pane)
-			open_action_menu(window, pane, "shells")
-		end),
+		action = menu_action("shells"),
 	},
-
-	-- Native terminal search.
 	{
 		key = "F",
 		mods = "CTRL|SHIFT",
-		action = wezterm.action.Search({
-			CaseSensitiveString = "",
-		}),
+		action = act.Search({ CaseSensitiveString = "" }),
 	},
-
-	-- Native Quick Select.
 	{
 		key = "Space",
 		mods = "CTRL|SHIFT",
-		action = wezterm.action.QuickSelect,
+		action = act.QuickSelect,
 	},
-
-	-- Split pane vertically.
 	{
 		key = "D",
 		mods = "ALT|SHIFT",
-		action = wezterm.action.SplitVertical({
-			domain = "CurrentPaneDomain",
-		}),
+		action = act.SplitVertical({ domain = "CurrentPaneDomain" }),
 	},
-
-	-- Split pane horizontally.
 	{
 		key = "R",
 		mods = "ALT|SHIFT",
-		action = wezterm.action.SplitHorizontal({
-			domain = "CurrentPaneDomain",
-		}),
+		action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }),
 	},
-
-	-- Navigate between panes.
 	{
 		key = "LeftArrow",
 		mods = "CTRL|SHIFT",
-		action = wezterm.action.ActivatePaneDirection("Left"),
+		action = act.ActivatePaneDirection("Left"),
 	},
 	{
 		key = "RightArrow",
 		mods = "CTRL|SHIFT",
-		action = wezterm.action.ActivatePaneDirection("Right"),
+		action = act.ActivatePaneDirection("Right"),
 	},
 	{
 		key = "UpArrow",
 		mods = "CTRL|SHIFT",
-		action = wezterm.action.ActivatePaneDirection("Up"),
+		action = act.ActivatePaneDirection("Up"),
 	},
 	{
 		key = "DownArrow",
 		mods = "CTRL|SHIFT",
-		action = wezterm.action.ActivatePaneDirection("Down"),
+		action = act.ActivatePaneDirection("Down"),
 	},
-
-	-- Zoom/unzoom current pane.
 	{
 		key = "Z",
 		mods = "CTRL|SHIFT",
-		action = wezterm.action.TogglePaneZoomState,
+		action = act.TogglePaneZoomState,
 	},
 }
+
+-- Replace the menu's top-level selector with the action callback above.
+config.keys[2].action = act.action_callback(function(window, pane)
+	open_menu(window, pane, "all")
+end)
 
 return config
