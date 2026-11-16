@@ -239,6 +239,18 @@ local function dispatch(window, pane, id, options)
 		local current = (window:get_config_overrides() or {}).window_background_opacity
 		set_override(window, "window_background_opacity", current == 1.0 and DEFAULT_OPACITY or 1.0)
 		return
+	elseif id == "appearance:tab-bar" then
+		local current = (window:get_config_overrides() or {}).enable_tab_bar
+		set_override(window, "enable_tab_bar", not (current == nil and false or current))
+		return
+	elseif id == "appearance:scrollbar" then
+		local current = (window:get_config_overrides() or {}).enable_scroll_bar
+		set_override(window, "enable_scroll_bar", not (current == nil and false or current))
+		return
+	elseif id == "appearance:cursor" then
+		local current = (window:get_config_overrides() or {}).default_cursor_style or "BlinkingBar"
+		set_override(window, "default_cursor_style", current == "BlinkingBar" and "SteadyBar" or "BlinkingBar")
+		return
 	end
 
 	if id == "workspace:create" then
