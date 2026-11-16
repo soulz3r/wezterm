@@ -45,7 +45,8 @@ The home-directory .wezterm.lua file loads this checkout. Update its project_dir
 
 | Area | Available controls |
 | --- | --- |
-| Projects | Search folders under D:\\projects and open each in a persistent project workspace |\n| Shells | PowerShell, CMD and optional Arch WSL in a tab, window or split |
+| Projects | Search folders under D:\projects and open each in a persistent project workspace |
+| Shells | PowerShell, CMD and optional Arch WSL in a tab, window or split |
 | Tabs | Create, navigate, move, close, rename, switch by title, native tab navigator |
 | Panes | Split, select, zoom, close, rotate and resize |
 | Search | fzf scrollback search, fzf Quick Select, native search, copy mode |
@@ -66,7 +67,8 @@ Scrollback search copies the selected line. Quick Select copies the extracted ma
 | Shortcut | Action |
 | --- | --- |
 | Ctrl+Shift+P | Full fzf palette |
-| Alt+Shift+P | Project picker |\n| Alt+Shift+L | Shell picker |
+| Alt+Shift+P | Project picker |
+| Alt+Shift+L | Shell picker |
 | Ctrl+Shift+F | fzf scrollback search |
 | Ctrl+Shift+Space | fzf Quick Select |
 | Alt+Shift+S | Searchable keymap guide |
