@@ -51,7 +51,7 @@ The home-directory .wezterm.lua file loads this checkout. Update its project_dir
 | Search | fzf scrollback search, fzf Quick Select, native search, copy mode |
 | Clipboard | Copy, paste and clear selection |
 | Scrollback | Top, bottom, page up/down and clear |
-| Appearance | Built-in color schemes, font presets, font size, opacity |
+| Appearance | Built-in color schemes, font presets, font size, opacity, tab bar, scrollbar and cursor blink toggles |
 | Workspaces | Switch, create and rename |
 | Window | Fullscreen and debug overlay |
 | Configuration | Reload and open the official documentation |
