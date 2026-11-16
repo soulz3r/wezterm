@@ -223,8 +223,10 @@ local function build_scrollback_results(pane, quick)
 		"%d+",
 	}
 
-	local function push(value, line_number)
-		value = value:gsub("^%s+", ""):gsub("%s+$", "")
+	local function push(value, line_number, preserve_whitespace)
+		if not preserve_whitespace then
+			value = value:gsub("^%s+", ""):gsub("%s+$", "")
+		end
 		if value == "" then
 			return
 		end
@@ -247,7 +249,7 @@ local function build_scrollback_results(pane, quick)
 				end
 			end
 		else
-			push(line, line_number)
+			push(line, line_number, true)
 		end
 	end
 
