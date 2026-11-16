@@ -167,7 +167,7 @@ run_menu_action = function(window, pane, id)
 end
 
 local function menu_action(mode)
-	return act.action_callback(function(window, pane)
+	return wezterm.action_callback(function(window, pane)
 		open_menu(window, pane, mode)
 	end)
 end
