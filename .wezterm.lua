@@ -36,6 +36,8 @@ local function shell_choices(mode)
 	return choices
 end
 
+local run_menu_action
+
 local function open_menu(window, pane, mode)
 	local choices = {}
 
@@ -83,13 +85,16 @@ local function open_menu(window, pane, mode)
 			title = mode == "shells" and "Shell picker" or "WezTerm",
 			choices = choices,
 			fuzzy = true,
+			action = wezterm.action_callback(function(inner_window, inner_pane, id)
+				run_menu_action(inner_window, inner_pane, id)
+			end),
 			description = "Type to filter  /  Enter to select  /  Esc to cancel",
 		}),
 		pane
 	)
 end
 
-local function run_menu_action(window, pane, id)
+run_menu_action = function(window, pane, id)
 	if not id then
 		return
 	end
