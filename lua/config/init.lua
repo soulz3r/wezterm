@@ -30,8 +30,19 @@ config.automatically_reload_config = true
 config.window_close_confirmation = "AlwaysPrompt"
 config.adjust_window_size_when_changing_font_size = false
 
+config.animation_fps = 60
+config.max_fps = 75
+
 config.default_cursor_style = "BlinkingBar"
-config.cursor_blink_rate = 500
+config.cursor_blink_rate = 650
+config.cursor_blink_ease_in = "EaseInOut"
+config.cursor_blink_ease_out = "EaseInOut"
+config.visual_bell = {
+	fade_in_function = "EaseIn",
+	fade_in_duration_ms = 75,
+	fade_out_function = "EaseOut",
+	fade_out_duration_ms = 150,
+}
 config.mouse_bindings = require("config.mouse")
 
 require("features.action_menu").setup(config, {
