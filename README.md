@@ -1,36 +1,33 @@
 # WezTerm
 
-A minimal WezTerm configuration for Windows, with an on-demand **fzf action menu**.
+A minimal WezTerm configuration for Windows, with an on-demand Lua action menu.
 
-The terminal stays clean by default. Press Ctrl+Shift+P to open the full action menu, or Alt+Shift+L for the shell picker.
+The terminal stays clean by default. Press **Ctrl+Shift+P** for the full action menu or **Alt+Shift+L** for the shell picker.
 
 ## Requirements
 
 - [WezTerm](https://wezterm.org/)
-- [PowerShell 7](https://github.com/PowerShell/PowerShell)
-- [fzf](https://github.com/junegunn/fzf)
-- pwsh.exe, cmd.exe, and wsl.exe available on PATH for their respective launch options
-- An Arch WSL distribution named Arch for the Arch Linux entries
+- PowerShell 7 (pwsh.exe), Command Prompt (cmd.exe), and WSL (wsl.exe) for their respective shell entries
+- An Arch WSL distribution named Arch for the Arch Linux entry
+
+There is no external menu script and no fzf dependency. The menu uses WezTerm's built-in InputSelector with fuzzy filtering, so selection and actions stay inside the Lua config and the WezTerm process.
 
 ## Menu
 
-The fzf menu provides:
-
-- **Shells:** PowerShell, Command Prompt, and Arch Linux (WSL), launched in tabs, panes, or new windows
-- **Tabs:** switch between tabs in the current window, rename the current tab, and close the current tab
-- **Windows:** create PowerShell or Arch Linux windows and rename the current window
-- **Panes:** split, navigate, resize, zoom, and close
-- **Workspaces:** rename the current workspace or create a new PowerShell/Arch workspace
-- **Scrollback:** fuzzy-select lines from the current pane's scrollback and copy them to the Windows clipboard
-
-The menu uses the WezTerm CLI for actions it exposes. Operations without a CLI equivalent remain native WezTerm shortcuts, including terminal search and Quick Select.
+- **Shells:** PowerShell, Command Prompt, and Arch Linux (WSL), launched in a tab, new window, or split pane
+- **Tabs:** previous, next, and close current tab
+- **Panes:** split, navigate, zoom, and close
+- **Search:** native scrollback search and Quick Select
+- **Appearance:** increase, decrease, or reset font size
+- **Window:** toggle fullscreen
+- **Configuration:** reload the config
 
 ## Shortcuts
 
 | Shortcut | Action |
 | --- | --- |
-| Ctrl+Shift+P | Full fzf action menu |
-| Alt+Shift+L | Shell-only fzf picker |
+| Ctrl+Shift+P | Lua action menu |
+| Alt+Shift+L | Lua shell picker |
 | Ctrl+Shift+F | Native scrollback search |
 | Ctrl+Shift+Space | Native Quick Select |
 | Alt+Shift+D | Split pane vertically |
@@ -40,6 +37,4 @@ The menu uses the WezTerm CLI for actions it exposes. Operations without a CLI e
 
 ## Install
 
-Place .wezterm.lua in your WezTerm configuration directory and keep scripts/action-menu.ps1 at the matching relative path.
-
-Make sure fzf.exe is on PATH, then reload WezTerm configuration.
+Place .wezterm.lua in your WezTerm configuration directory, then reload the configuration.
