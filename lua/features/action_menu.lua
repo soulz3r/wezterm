@@ -150,13 +150,7 @@ local function build_scrollback_results(pane, quick)
 		"%x%x%x%x%x%x%x%x+",
 		"%d+%.%d+%.%d+%.%d+",
 		"%d+",
-	}'()*+,;=%%%-]+",
-		"[%w_%.%-]+/[%w_%.%-%/]+",
-		"%x%x%x%x%x%x%x%x+",
-		"%d+%.%d+%.%d+%.%d+",
-		"%d+",
 	}
-
 	local function push(value, line_number)
 		value = value:gsub("^%s+", ""):gsub("%s+$", "")
 		if value == "" then return end
