@@ -353,9 +353,6 @@ config.keys = {
 	},
 }
 
--- Replace the menu's top-level selector with the action callback above.
-config.keys[2].action = act.action_callback(function(window, pane)
-	open_menu(window, pane, "all")
-end)
+config.keys[2].action = menu_action("all")
 
 return config
