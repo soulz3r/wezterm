@@ -1,6 +1,25 @@
 local wezterm = require("wezterm")
 local config = wezterm.config_builder()
 
+local action_menu_path = wezterm.config_dir .. "/scripts/action-menu.ps1"
+local wezterm_exe = wezterm.executable_dir .. "\\wezterm.exe"
+
+local function open_action_menu(window, pane, mode)
+	window:spawn_tab({
+		args = {
+			"pwsh.exe",
+			"-NoLogo",
+			"-NoProfile",
+			"-File",
+			action_menu_path,
+			tostring(pane:pane_id()),
+			mode or "all",
+			wezterm_exe,
+		},
+		cwd = "D:\\projects\\",
+	})
+end
+
 -- =========================================================
 -- Shell
 -- =========================================================
@@ -8,27 +27,13 @@ local config = wezterm.config_builder()
 config.default_prog = { "pwsh.exe", "-NoLogo" }
 config.default_cwd = "D:\\projects\\"
 
-config.launch_menu = {
-	{
-		label = "PowerShell",
-		args = { "pwsh.exe", "-NoLogo" },
-	},
-	{
-		label = "Command Prompt",
-		args = { "cmd.exe" },
-	},
-	{
-		label = "Arch Linux (WSL)",
-		args = { "wsl.exe", "-d", "Arch" },
-	},
-}
+-- Shells are launched through the fzf action menu.
 
 -- =========================================================
 -- Appearance
 -- =========================================================
 
 config.color_scheme = "Everforest Dark (Gogh)"
-
 config.window_decorations = "RESIZE"
 config.window_background_opacity = 0.85
 
@@ -137,7 +142,25 @@ config.keys = {
 		action = wezterm.action.DisableDefaultAssignment,
 	},
 
-	-- Search terminal scrollback.
+	-- Main fzf action menu.
+	{
+		key = "P",
+		mods = "CTRL|SHIFT",
+		action = wezterm.action_callback(function(window, pane)
+			open_action_menu(window, pane, "all")
+		end),
+	},
+
+	-- Shell-only fzf picker.
+	{
+		key = "L",
+		mods = "ALT|SHIFT",
+		action = wezterm.action_callback(function(window, pane)
+			open_action_menu(window, pane, "shells")
+		end),
+	},
+
+	-- Native terminal search.
 	{
 		key = "F",
 		mods = "CTRL|SHIFT",
@@ -146,25 +169,11 @@ config.keys = {
 		}),
 	},
 
-	-- Command palette.
-	{
-		key = "P",
-		mods = "CTRL|SHIFT",
-		action = wezterm.action.ActivateCommandPalette,
-	},
-
-	-- Quick select.
+	-- Native Quick Select.
 	{
 		key = "Space",
 		mods = "CTRL|SHIFT",
 		action = wezterm.action.QuickSelect,
-	},
-
-	-- Shell launcher.
-	{
-		key = "L",
-		mods = "ALT|SHIFT",
-		action = wezterm.action.ShowLauncher,
 	},
 
 	-- Split pane vertically.
