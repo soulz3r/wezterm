@@ -305,6 +305,12 @@ local function open_scrollback(window, pane, options, quick)
 	open(window, pane, items, options)
 end
 
+local function set_scheme(window, name)
+	local overrides = window:get_config_overrides() or {}
+	overrides.color_scheme = name
+	window:set_config_overrides(overrides)
+end
+
 local function open_schemes(window, pane, options)
 	local items = {}
 	local schemes = wezterm.get_builtin_color_schemes()
@@ -377,9 +383,9 @@ local function resolve_action(window, pane, id, options)
 		return
 	elseif kind == "scheme" then
 		if rest == "default" then
-			window:set_config_overrides({ color_scheme = default_scheme })
+			set_scheme(window, default_scheme)
 		elseif rest:match("^apply:") then
-			window:set_config_overrides({ color_scheme = rest:sub(7) })
+			set_scheme(window, rest:sub(7))
 		end
 		return
 	elseif kind == "tab" then
@@ -508,8 +514,8 @@ function M.setup(config, options)
 		{ key = "Space", mods = "CTRL|SHIFT", action = wezterm.action_callback(function(w, p) open_scrollback(w, p, options, true) end) },
 		{ key = "S", mods = "ALT|SHIFT", action = wezterm.action_callback(function(w, p) open(w, p, build_cheatsheet(), options) end) },
 		{ key = "O", mods = "ALT|SHIFT", action = wezterm.action_callback(function(w, p) open_schemes(w, p, options) end) },
-		{ key = "D", mods = "ALT|SHIFT", action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
-		{ key = "R", mods = "ALT|SHIFT", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
+		{ key = "D", mods = "ALT|SHIFT", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
+		{ key = "R", mods = "ALT|SHIFT", action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
 		{ key = "T", mods = "ALT|SHIFT", action = act.SpawnTab("CurrentPaneDomain") },
 		{ key = "W", mods = "ALT|SHIFT", action = act.CloseCurrentTab({ confirm = true }) },
 		{ key = "C", mods = "ALT|SHIFT", action = act.ActivateCopyMode },
