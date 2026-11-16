@@ -148,7 +148,7 @@ end
 
 local function open(window, pane, mode, options)
 	local items = build_choices(window, mode)
-	local script = wezterm.config_dir .. "/scripts/fzf-menu.ps1"
+	local script = options.project_dir .. "/scripts/fzf-menu.ps1"
 	local _, menu_pane = window:mux_window():spawn_tab({
 		cwd = options.projects,
 		args = { "pwsh.exe", "-NoLogo", "-NoProfile", "-File", script },
