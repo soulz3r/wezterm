@@ -1,6 +1,8 @@
 local wezterm = require("wezterm")
 local config = wezterm.config_builder()
 
+config:set_strict_mode(true)
+
 local project_dir = "D:/config/wezterm"
 local projects = "D:/projects"
 
