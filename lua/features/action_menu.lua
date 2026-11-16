@@ -264,10 +264,15 @@ local function find_shell(name)
 end
 
 local function open(window, pane, items, options)
-	local path = write_items(items)
-	local script = options.project_dir .. "/scripts/fzf-menu.ps1"
+	local write_ok, path = pcall(write_items, items)
+	if not write_ok then
+		window:toast_notification("WezTerm fzf", "Could not prepare menu data.", nil, 4000)
+		wezterm.log_error("Unable to write fzf menu data: " .. tostring(path))
+		return
+	end
 
-	local ok, _, menu_pane = pcall(function()
+	local script = options.project_dir .. "/scripts/fzf-menu.ps1"
+	local spawn_ok, tab_or_error, menu_pane = pcall(function()
 		return window:mux_window():spawn_tab({
 			cwd = options.projects,
 			args = { "pwsh.exe", "-NoLogo", "-NoProfile", "-File", script },
@@ -277,7 +282,7 @@ local function open(window, pane, items, options)
 		})
 	end)
 
-	if not ok or not menu_pane then
+	if not spawn_ok or not menu_pane then
 		os.remove(path)
 		window:toast_notification(
 			"WezTerm fzf",
@@ -285,7 +290,7 @@ local function open(window, pane, items, options)
 			nil,
 			4000
 		)
-		wezterm.log_error("Unable to spawn fzf menu tab: " .. tostring(_))
+		wezterm.log_error("Unable to spawn fzf menu tab: " .. tostring(tab_or_error))
 		return
 	end
 
@@ -498,18 +503,25 @@ function M.setup(config, options)
 			return
 		end
 
-		local index = tonumber(value:match("^result:(%d+)$"))
-		if index and state.items[index] and state.items[index].value then
-			local selected = state.items[index].value
-			window:copy_to_clipboard(selected, "Clipboard")
-			window:toast_notification("WezTerm fzf", "Copied: " .. selected, nil, 1800)
-			return
-		end
+		local ok, err = pcall(function()
+			local index = tonumber(value:match("^result:(%d+)$"))
+			if index and state.items[index] and state.items[index].value then
+				local selected = state.items[index].value
+				window:copy_to_clipboard(selected, "Clipboard")
+				window:toast_notification("WezTerm fzf", "Copied: " .. selected, nil, 1800)
+				return
+			end
 
-		if value == "search:fzf" or value == "search:quick" then
-			open_scrollback(window, target_pane, options, value == "search:quick")
-		else
-			resolve_action(window, target_pane, value, options)
+			if value == "search:fzf" or value == "search:quick" then
+				open_scrollback(window, target_pane, options, value == "search:quick")
+			else
+				resolve_action(window, target_pane, value, options)
+			end
+		end)
+
+		if not ok then
+			window:toast_notification("WezTerm fzf", "The selected action failed. Check the debug overlay.", nil, 4000)
+			wezterm.log_error("fzf action failed: " .. tostring(err))
 		end
 	end)
 
