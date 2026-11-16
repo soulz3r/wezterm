@@ -18,6 +18,9 @@ PowerShell is the default shell. The Arch WSL entry is optional; the rest of the
 
 ```text
 .
+├── .github
+│   └── workflows
+│       └── validate.yml
 ├── .wezterm.lua
 ├── README.md
 ├── lua
@@ -91,3 +94,5 @@ Keep the project at `D:\config\wezterm`. The home-directory `.wezterm.lua` entry
 Install fzf, ensure `fzf.exe` and `pwsh.exe` are on `PATH`, then reload WezTerm. The configured working directory is `D:\projects`.
 
 Use `wezterm show-keys` to inspect the effective key and mouse assignments. Use **Ctrl+Shift+L** to open WezTerm's debug overlay when investigating runtime errors.
+
+GitHub Actions checks Lua 5.4 syntax and parses the PowerShell launcher on every push to `main` and pull request. These checks catch syntax errors; they do not replace testing the menus inside a running WezTerm session.
