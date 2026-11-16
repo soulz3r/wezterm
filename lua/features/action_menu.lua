@@ -145,7 +145,10 @@ local function build_scrollback_results(pane, quick)
 	local results = {}
 	local seen = {}
 	local patterns = {
-		"https?://[%w%._~:/%?#%[%]@!$&'()*+,;=%%%-]+",
+		"https://[%w%._~:/%?#%[%]@!		"https?://[%w%._~:/%?#%[%]@!$&'()*+,;=%%%-]+",
+		"[%w_%.%-]+/[%w_%.%-%/]+",'()*+,;=%%%-]+",
+		"http://[%w%._~:/%?#%[%]@!		"https?://[%w%._~:/%?#%[%]@!$&'()*+,;=%%%-]+",
+		"[%w_%.%-]+/[%w_%.%-%/]+",'()*+,;=%%%-]+",
 		"[%w_%.%-]+/[%w_%.%-%/]+",
 		"%x%x%x%x%x%x%x%x+",
 		"%d+%.%d+%.%d+%.%d+",
@@ -323,6 +326,11 @@ local function resolve_action(window, pane, id, options)
 		["debug"] = act.ShowDebugOverlay,
 		["config:reload"] = act.ReloadConfiguration,
 	}
+
+	if id == "docs" then
+		wezterm.open_with("https://wezterm.org")
+		return
+	end
 
 	local action = actions[id]
 	if action then window:perform_action(action, pane) end
