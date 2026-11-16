@@ -241,7 +241,7 @@ local function dispatch(window, pane, id, options)
 		return
 	elseif id == "appearance:tab-bar" then
 		local current = (window:get_config_overrides() or {}).enable_tab_bar
-		set_override(window, "enable_tab_bar", not (current == nil and false or current))
+		set_override(window, "enable_tab_bar", current ~= true)
 		return
 	elseif id == "appearance:scrollbar" then
 		local current = (window:get_config_overrides() or {}).enable_scroll_bar
