@@ -1,7 +1,8 @@
 local wezterm = require("wezterm")
 local config = wezterm.config_builder()
 
-local projects = "D:\\projects\\"
+local project_dir = "D:/config/wezterm"
+local projects = "D:/projects"
 
 config.default_prog = { "pwsh.exe", "-NoLogo" }
 config.default_cwd = projects
@@ -31,6 +32,9 @@ config.default_cursor_style = "BlinkingBar"
 config.cursor_blink_rate = 500
 config.mouse_bindings = require("config.mouse")
 
-require("features.action_menu").setup(config, { projects = projects })
+require("features.action_menu").setup(config, {
+	projects = projects,
+	project_dir = project_dir,
+})
 
 return config
