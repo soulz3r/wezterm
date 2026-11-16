@@ -85,6 +85,8 @@ The fzf interface runs in a temporary tab. When a selection is made, the tab clo
 | Alt+Shift+Enter | Toggle fullscreen |
 | Ctrl+Shift+R | Reload configuration |
 
+The default `Ctrl+Shift+X` copy-mode shortcut is disabled; use `Alt+Shift+C` instead.
+
 The configuration uses WezTerm's strict config-builder mode. Invalid configuration fields should be reported instead of silently slipping through.
 
 ## Install
