@@ -10,7 +10,8 @@ This document separates WezTerm's capabilities by how they should be controlled.
 - Search: native search, scrollback search and pattern-based Quick Select
 - Clipboard and scrollback operations
 - Font size, font presets, color schemes and background opacity
-- Project discovery from the configured project root and persistent project workspaces\n- Workspace switching, creation and rename
+- Project discovery from the configured project root and persistent project workspaces
+- Workspace switching, creation and rename
 - Fullscreen and debug overlay
 
 The action catalog is kept in lua/features/action_registry.lua. Dispatch and fzf lifecycle management live in lua/features/action_menu.lua.
@@ -51,7 +52,6 @@ Domains, SSH, serial, WSL and mux connections depend on the user's environment a
 Potential modules should be independent and opt-in where appropriate:
 
 1. Domain and SSH profile picker, populated only from configured domains.
-2. Project picker, populated from a user-configured project root.
-3. More runtime appearance overrides.
-4. Optional status and notification modules.
-5. Dedicated tests for action dispatch and fzf selection lifecycle.
+2. More runtime appearance overrides.
+3. Optional status and notification modules.
+4. Dedicated tests for action dispatch and fzf selection lifecycle.
