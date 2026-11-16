@@ -10,7 +10,7 @@ The terminal stays quiet by default. Shells, tabs, panes, search, quick selectio
 - [fzf](https://github.com/junegunn/fzf), with `fzf.exe` available on `PATH`
 - PowerShell 7, with `pwsh.exe` available on `PATH`
 - WSL with a distribution named `Arch` for the Arch shell entry
-- The configured directories `D:\\config\\wezterm` and `D:\\projects`
+- The configured directories `D:\config\wezterm` and `D:\projects`
 
 PowerShell is the default shell. The Arch WSL entry is optional; the rest of the configuration does not require WSL.
 
@@ -86,8 +86,8 @@ The configuration uses WezTerm's strict config-builder mode. Invalid configurati
 
 ## Install
 
-Keep the project at `D:\\config\\wezterm`. The home-directory `.wezterm.lua` entrypoint must point to that project path.
+Keep the project at `D:\config\wezterm`. The home-directory `.wezterm.lua` entrypoint must point to that project path.
 
-Install fzf, ensure `fzf.exe` and `pwsh.exe` are on `PATH`, then reload WezTerm. The configured working directory is `D:\\projects`.
+Install fzf, ensure `fzf.exe` and `pwsh.exe` are on `PATH`, then reload WezTerm. The configured working directory is `D:\projects`.
 
 Use `wezterm show-keys` to inspect the effective key and mouse assignments. Use **Ctrl+Shift+L** to open WezTerm's debug overlay when investigating runtime errors.
