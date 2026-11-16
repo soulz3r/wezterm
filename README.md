@@ -1,100 +1,101 @@
 # WezTerm
 
-A minimal Windows WezTerm configuration with a real, searchable **fzf command interface**.
+A minimal Windows WezTerm setup with a searchable **fzf command palette**. The default terminal stays quiet; interactive controls live behind menus.
 
-The terminal stays quiet by default. Shells, tabs, panes, search, quick selection, color schemes, and the cheat sheet are available through fzf.
+## Design
+
+- Keep the default window visually minimal.
+- Put discoverable actions in fzf instead of filling the screen with buttons or tab bars.
+- Keep WezTerm's native actions native. Use Lua callbacks only where a native action cannot express the behavior.
+- Keep the fzf launcher isolated in PowerShell; Lua owns the menu catalog and action dispatch.
+- Prefer graceful feature checks over failing the entire configuration because one action is unavailable in a particular WezTerm build.
 
 ## Requirements
 
-- [WezTerm](https://wezterm.org/)
-- [fzf](https://github.com/junegunn/fzf), with `fzf.exe` available on `PATH`
-- PowerShell 7, with `pwsh.exe` available on `PATH`
-- WSL with a distribution named `Arch` for the Arch shell entry
-- The configured directories `D:\config\wezterm` and `D:\projects`
+- WezTerm (current stable recommended)
+- fzf.exe on PATH
+- PowerShell 7 (pwsh.exe) on PATH
+- Optional WSL distribution named Arch
+- Project checkout at D:\config\wezterm
+- Working directory D:\projects
 
-PowerShell is the default shell. The Arch WSL entry is optional; the rest of the configuration does not require WSL.
+The home-directory .wezterm.lua file loads this checkout. Update its project_dir if the repository moves.
 
-## Project structure
+## Layout
 
-```text
-.
-├── .github
-│   └── workflows
-│       └── validate.yml
-├── .wezterm.lua
-├── README.md
-├── lua
-│   ├── config
-│   │   ├── init.lua
-│   │   └── mouse.lua
-│   └── features
-│       └── action_menu.lua
-└── scripts
-    └── fzf-menu.ps1
-```
+    .
+    ├── .github/workflows/validate.yml
+    ├── .wezterm.lua
+    ├── README.md
+    ├── docs/
+    │   └── FEATURES.md
+    ├── lua/
+    │   ├── config/
+    │   │   ├── init.lua
+    │   │   └── mouse.lua
+    │   └── features/
+    │       ├── action_registry.lua
+    │       └── action_menu.lua
+    └── scripts/
+        └── fzf-menu.ps1
 
-The home-directory `.wezterm.lua` entrypoint loads this repository from `D:/config/wezterm`. Keep that path in sync if the repository is moved.
+## Command palette
 
-Lua owns configuration and WezTerm actions. PowerShell reads the menu data, runs fzf, and returns the selected action through a WezTerm user variable.
+**Ctrl+Shift+P** opens the full fzf palette. **Alt+Shift+L** opens the shell picker.
 
-## fzf command interface
+| Area | Available controls |
+| --- | --- |
+| Shells | PowerShell, CMD and optional Arch WSL in a tab, window or split |
+| Tabs | Create, navigate, move, close, rename, switch by title, native tab navigator |
+| Panes | Split, select, zoom, close, rotate and resize |
+| Search | fzf scrollback search, fzf Quick Select, native search, copy mode |
+| Clipboard | Copy, paste and clear selection |
+| Scrollback | Top, bottom, page up/down and clear |
+| Appearance | Built-in color schemes, font presets, font size, opacity |
+| Workspaces | Switch, create and rename |
+| Window | Fullscreen and debug overlay |
+| Configuration | Reload and open the official documentation |
+| Help | Searchable keymap guide |
 
-Open the complete menu with **Ctrl+Shift+P**.
+The fzf menu is opened in a temporary tab. The PowerShell helper reads a temporary JSON catalog and returns the selected ID through the WEZTERM_MENU_ACTION user variable. Lua closes the temporary tab and dispatches the selection to the original pane.
 
-- **Shells:** PowerShell, CMD, and Arch WSL. The full menu offers new tab, new window, and split-pane launch modes.
-- **Tabs:** create, switch, move, close, and open the native tab navigator.
-- **Panes:** split, focus, rotate, select, zoom, and close.
-- **Search:** fzf over the active pane's retained scrollback.
-- **Quick Select:** extract URLs, Windows drive paths, Unix-style paths, hexadecimal strings, dotted numeric addresses, and numbers from scrollback.
-- **Clipboard:** copy, paste, and clear selection.
-- **Scrollback:** top, bottom, page navigation, and clear.
-- **Appearance:** font size controls and built-in WezTerm color schemes.
-- **Window:** fullscreen, maximize, restore, and debug overlay.
-- **Workspaces:** switch between existing workspaces.
-- **Cheat sheet:** searchable list of custom shortcuts with actionable entries.
-- **Config:** reload configuration and open WezTerm documentation.
-
-Search and Quick Select both use fzf. Selecting a search result copies the full line; selecting a Quick Select result copies the extracted match. Neither action moves the terminal viewport to the source line.
-
-The fzf interface runs in a temporary tab. When a selection is made, the tab closes and Lua dispatches the selected action. If fzf cannot start, the script reports the error and sends a cancellation event so the temporary tab and menu data file can be cleaned up.
-
-**Platform note:** WezTerm's always-on-top and always-on-bottom actions are currently implemented only on macOS, so they are intentionally not exposed by this Windows configuration.
+Scrollback search copies the selected line. Quick Select copies the extracted match. These actions do not move the viewport to the source line.
 
 ## Keymaps
 
 | Shortcut | Action |
 | --- | --- |
-| Ctrl+Shift+P | Full fzf action menu |
-| Alt+Shift+L | fzf shell picker |
+| Ctrl+Shift+P | Full fzf palette |
+| Alt+Shift+L | Shell picker |
 | Ctrl+Shift+F | fzf scrollback search |
 | Ctrl+Shift+Space | fzf Quick Select |
-| Alt+Shift+S | fzf cheat sheet |
-| Alt+Shift+O | fzf color scheme picker |
-| Alt+Shift+D | Split pane right |
-| Alt+Shift+R | Split pane down |
+| Alt+Shift+S | Searchable keymap guide |
+| Alt+Shift+O | Color scheme picker |
+| Alt+Shift+D | Split right |
+| Alt+Shift+R | Split down |
 | Alt+Shift+T | New tab |
-| Alt+Shift+W | Close current tab |
-| Alt+Shift+C | Enter copy mode |
-| Ctrl+Shift+C | Copy selection |
-| Ctrl+Shift+V | Paste clipboard |
-| Ctrl+Shift+Arrow | Navigate panes |
-| Ctrl+Shift+Z | Toggle pane zoom |
-| Alt+Shift+Up | Scroll one page up |
-| Alt+Shift+Down | Scroll one page down |
+| Alt+Shift+W | Close tab |
+| Alt+Shift+C | Copy mode |
+| Ctrl+Shift+C / V | Copy / paste |
+| Ctrl+Shift+Arrow | Move focus between panes |
+| Ctrl+Shift+Z | Zoom pane |
+| Alt+Shift+Up / Down | Scroll a page |
 | Ctrl+Shift+K | Clear scrollback |
-| Alt+Shift+Enter | Toggle fullscreen |
+| Alt+Shift+Enter | Fullscreen |
 | Ctrl+Shift+R | Reload configuration |
 
-The default `Ctrl+Shift+X` copy-mode shortcut is disabled; use `Alt+Shift+C` instead.
+The default Ctrl+Shift+X assignment is disabled.
 
-The configuration uses WezTerm's strict config-builder mode. Invalid configuration fields should be reported instead of silently slipping through.
+## Validation
 
-## Install
+GitHub Actions parses every Lua file with Lua 5.4 and parses the PowerShell launcher on Windows. These checks catch syntax errors, not every runtime API mismatch. After pulling changes, reload WezTerm and test the palette, shell launch, tab/pane controls, theme picker and workspace actions in a live session.
 
-Keep the project at `D:\config\wezterm`. The home-directory `.wezterm.lua` entrypoint must point to that project path.
+Useful diagnostics:
 
-Install fzf, ensure `fzf.exe` and `pwsh.exe` are on `PATH`, then reload WezTerm. The configured working directory is `D:\projects`.
+- wezterm show-keys
+- wezterm --config-file D:\config\wezterm\.wezterm.lua show-config
+- WezTerm debug overlay: Ctrl+Shift+L (native default may vary)
 
-Use `wezterm show-keys` to inspect the effective key and mouse assignments. Use **Ctrl+Shift+L** to open WezTerm's debug overlay when investigating runtime errors.
+## Scope
 
-GitHub Actions checks Lua 5.4 syntax and parses the PowerShell launcher on every push to `main` and pull request. These checks catch syntax errors; they do not replace testing the menus inside a running WezTerm session.
+WezTerm is both a terminal emulator and a programmable multiplexer. Its complete API includes configuration fields, actions, events, domains, CLI commands and platform-specific integrations. Not every API is a meaningful interactive command. This repository exposes the practical GUI/session controls in fzf and keeps static configuration in Lua. See docs/FEATURES.md for the feature map and known boundaries.
