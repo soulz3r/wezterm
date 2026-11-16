@@ -1,11 +1,29 @@
 $ErrorActionPreference = "Stop"
 
+$action = "cancel"
+$menuFile = $env:WEZTERM_MENU_FILE
+$tab = [char]9
+
 try {
+    if ([string]::IsNullOrWhiteSpace($menuFile)) {
+        throw "WEZTERM_MENU_FILE was not provided by the WezTerm configuration."
+    }
+
+    if (-not (Test-Path -LiteralPath $menuFile -PathType Leaf)) {
+        throw "The fzf menu data file does not exist: $menuFile"
+    }
+
     $fzf = Get-Command "fzf.exe" -ErrorAction Stop
-    $items = Get-Content -LiteralPath $env:WEZTERM_MENU_FILE -Raw | ConvertFrom-Json
-    $tab = [char]9
+    $items = Get-Content -LiteralPath $menuFile -Raw -Encoding UTF8 | ConvertFrom-Json
+
     $rows = foreach ($item in $items) {
-        "$($item.label)$tab$($item.id)"
+        if ($null -ne $item.label -and $null -ne $item.id) {
+            "$($item.label)$tab$($item.id)"
+        }
+    }
+
+    if (-not $rows) {
+        throw "The fzf menu contains no usable entries."
     }
 
     $fzfArgs = @(
@@ -26,20 +44,28 @@ try {
     )
 
     $selected = $rows | & $fzf.Source @fzfArgs
-    if ($LASTEXITCODE -eq 0 -and $selected) {
-        $action = ($selected -split [regex]::Escape("$tab"), 2)[1]
-    }
-    else {
-        $action = "cancel"
-    }
 
-    $encoded = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($action))
-    [Console]::Write("$([char]27)]1337;SetUserVar=WEZTERM_MENU_ACTION=$encoded$([char]7)")
-    Start-Sleep -Milliseconds 1200
+    if ($LASTEXITCODE -eq 0 -and $selected) {
+        $parts = $selected -split [regex]::Escape("$tab"), 2
+        if ($parts.Count -eq 2 -and -not [string]::IsNullOrWhiteSpace($parts[1])) {
+            $action = $parts[1]
+        }
+    }
 }
 catch {
     Write-Host ""
     Write-Host "  fzf menu failed: $($_.Exception.Message)" -ForegroundColor Red
-    Write-Host "  Install fzf and ensure fzf.exe is available on PATH." -ForegroundColor Yellow
-    Read-Host "  Press Enter to close"
+    Write-Host "  Check that fzf.exe is on PATH and the menu file is readable." -ForegroundColor Yellow
+    Start-Sleep -Milliseconds 1200
+}
+finally {
+    try {
+        $encoded = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($action))
+        [Console]::Write("$([char]27)]1337;SetUserVar=WEZTERM_MENU_ACTION=$encoded$([char]7)")
+        [Console]::Out.Flush()
+        Start-Sleep -Milliseconds 150
+    }
+    catch {
+        # The WezTerm pane may already have closed; there is nothing left to notify.
+    }
 }
