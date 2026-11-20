@@ -9,15 +9,9 @@ local function item(items, label, id, category)
 	})
 end
 
-function M.build(window, mode)
+function M.build(window, mode, shells)
 	local items = {}
-
-	local shells = {
-		{ name = "Git Bash", args = { "C:/Program Files/Git/bin/bash.exe", "--rcfile", "/d/config/bash/.bashrc", "-i" } },
-		{ name = "PowerShell", args = { "pwsh.exe", "-NoLogo" } },
-		{ name = "Command Prompt", args = { "cmd.exe" } },
-		{ name = "Arch Linux (WSL)", args = { "wsl.exe", "-d", "Arch" } },
-	}
+	shells = shells or {}
 
 	for _, shell in ipairs(shells) do
 		item(items, shell.name .. " / New tab", "shell:tab:" .. shell.name, "Shells")
