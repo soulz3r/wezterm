@@ -1,6 +1,6 @@
 # WezTerm
 
-A minimal Windows WezTerm setup with a searchable **fzf command palette**. The default terminal stays quiet; interactive controls live behind menus.
+A minimal Windows WezTerm setup with a searchable **fzf command palette**. The default terminal starts Git Bash; interactive terminal controls live behind menus.
 
 ## Design
 
@@ -14,12 +14,13 @@ A minimal Windows WezTerm setup with a searchable **fzf command palette**. The d
 
 - WezTerm (current stable recommended)
 - fzf.exe on PATH
-- PowerShell 7 (pwsh.exe) on PATH
+- Git for Windows installed at `C:/Program Files/Git`
+- PowerShell 7 (pwsh.exe) on PATH for the fzf command palette
 - Optional WSL distribution named Arch
 - Project checkout at D:\config\wezterm
 - Working directory D:\projects
 
-The home-directory .wezterm.lua file loads this checkout. Update its project_dir if the repository moves.
+The home-directory .wezterm.lua file loads this checkout. Update its project_dir if the repository moves. Git Bash is the default shell and uses `D:/config/bash/.bashrc`; the shell picker can still launch PowerShell, CMD or Arch WSL.
 
 ## Layout
 
@@ -46,7 +47,7 @@ The home-directory .wezterm.lua file loads this checkout. Update its project_dir
 | Area | Available controls |
 | --- | --- |
 | Projects | Search folders under D:\projects and open each in a persistent project workspace |
-| Shells | PowerShell, CMD and optional Arch WSL in a tab, window or split |
+| Shells | Git Bash, PowerShell, CMD and optional Arch WSL in a tab, window or split |
 | Tabs | Create, navigate, move, close, rename, switch by title, native tab navigator |
 | Panes | Split, select, zoom, close, rotate and resize |
 | Search | fzf scrollback search, fzf Quick Select, native search, copy mode |
