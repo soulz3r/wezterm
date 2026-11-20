@@ -1,4 +1,5 @@
 # Minmax amber color scheme for WezTerm.
+# Full source palette: base colors plus ANSI and indexed terminal colors.
 
 [colors]
 foreground = "#d6a45d"
@@ -8,9 +9,51 @@ cursor_border = "#f2cf91"
 cursor_fg = "#100c07"
 selection_bg = "#51402b"
 selection_fg = "#f2cf91"
+scrollbar_thumb = "#51402b"
+split = "#51402b"
+compose_cursor = "#c5e39a"
+visual_bell = "#d97968"
 
-ansi = ["#100c07", "#d97968", "#b88748", "#9fbd78", "#80633c", "#9fbd78", "#b88748", "#d6a45d"]
-brights = ["#51402b", "#d97968", "#f2cf91", "#c5e39a", "#b88748", "#c5e39a", "#d6a45d", "#f2cf91"]
+ansi = ["#100c07", "#d97968", "#b88748", "#9fbd78", "#80633c", "#c9ae7a", "#51402b", "#d6a45d"]
+brights = ["#51402b", "#d97968", "#d6a45d", "#c5e39a", "#b88748", "#c9ae7a", "#80633c", "#f2cf91"]
+
+[colors.indexed]
+16 = "#100c07"
+17 = "#d6a45d"
+18 = "#f2cf91"
+19 = "#b88748"
+20 = "#80633c"
+21 = "#51402b"
+22 = "#9fbd78"
+23 = "#c5e39a"
+24 = "#c9ae7a"
+25 = "#d97968"
+
+[colors.tab_bar]
+background = "#100c07"
+
+[colors.tab_bar.active_tab]
+bg_color = "#b88748"
+fg_color = "#100c07"
+intensity = "Bold"
+
+[colors.tab_bar.inactive_tab]
+bg_color = "#51402b"
+fg_color = "#80633c"
+
+[colors.tab_bar.inactive_tab_hover]
+bg_color = "#80633c"
+fg_color = "#f2cf91"
+italic = true
+
+[colors.tab_bar.new_tab]
+bg_color = "#100c07"
+fg_color = "#b88748"
+
+[colors.tab_bar.new_tab_hover]
+bg_color = "#9fbd78"
+fg_color = "#100c07"
+italic = true
 
 [metadata]
 name = "Minmax Amber"
