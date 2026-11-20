@@ -1,5 +1,6 @@
 # Minmax mono color scheme for WezTerm.
-# Full source palette: base colors plus ANSI and indexed terminal colors.
+# ANSI slots are intentionally separated by file-type and UI role.
+# Indexed colors 16-25 preserve the complete Minmax source palette.
 
 [colors]
 foreground = "#a6c5a8"
@@ -14,8 +15,8 @@ split = "#354b3c"
 compose_cursor = "#eff8ee"
 visual_bell = "#c9827b"
 
-ansi = ["#080c09", "#c9827b", "#82a78a", "#c1d5c2", "#587360", "#9db8a1", "#354b3c", "#a6c5a8"]
-brights = ["#354b3c", "#c9827b", "#a6c5a8", "#eff8ee", "#82a78a", "#9db8a1", "#587360", "#e0f0df"]
+ansi = ["#080c09", "#c9827b", "#82a78a", "#eff8ee", "#c1d5c2", "#9db8a1", "#e0f0df", "#a6c5a8"]
+brights = ["#354b3c", "#c9827b", "#e0f0df", "#eff8ee", "#c1d5c2", "#9db8a1", "#82a78a", "#e0f0df"]
 
 [colors.indexed]
 16 = "#080c09"
