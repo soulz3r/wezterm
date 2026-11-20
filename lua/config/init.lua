@@ -17,7 +17,7 @@ config.default_cwd = projects
 -- Minmax terminal theme. The local schemes are also exposed in the
 -- searchable color-scheme picker.
 config.color_scheme_dirs = { project_dir .. "/colors" }
-config.color_scheme = "Minmax phosphor"
+config.color_scheme = "Minmax Phosphor"
 
 config.window_decorations = "RESIZE"
 config.window_background_opacity = 0.85
