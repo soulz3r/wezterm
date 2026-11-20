@@ -5,6 +5,8 @@ A minimal Windows WezTerm setup with a searchable **fzf command palette**. The d
 ## Design
 
 - Keep the default window visually minimal.
+- Use Minmax phosphor by default, with four local Minmax variants available in the color-scheme picker.
+- Keep the WezTerm and fzf palettes visually consistent with minmax.nvim.
 - Put discoverable actions in fzf instead of filling the screen with buttons or tab bars.
 - Keep WezTerm's native actions native. Use Lua callbacks only where a native action cannot express the behavior.
 - Keep the fzf launcher isolated in PowerShell; Lua owns the menu catalog and action dispatch.
@@ -28,6 +30,11 @@ The home-directory .wezterm.lua file loads this checkout. Update its project_dir
     ├── .github/workflows/validate.yml
     ├── .wezterm.lua
     ├── README.md
+    ├── colors/
+    │   ├── minmax-phosphor.toml
+    │   ├── minmax-mono.toml
+    │   ├── minmax-amber.toml
+    │   └── minmax-oxide.toml
     ├── docs/
     │   └── FEATURES.md
     ├── lua/
@@ -39,6 +46,19 @@ The home-directory .wezterm.lua file loads this checkout. Update its project_dir
     │       └── action_menu.lua
     └── scripts/
         └── fzf-menu.ps1
+
+## Minmax themes
+
+Minmax phosphor is the default terminal scheme. The four local schemes are loaded from `colors/` and are available through the searchable color-scheme picker (`Alt+Shift+O`):
+
+| Scheme | Palette |
+| --- | --- |
+| `Minmax phosphor` | Phosphor green with amber accents |
+| `Minmax mono` | Soft monochrome green |
+| `Minmax amber` | Warm amber with green details |
+| `Minmax oxide` | Muted teal with copper accents |
+
+The fzf command palette uses the Minmax phosphor colors and keeps the terminal background transparent.
 
 ## Command palette
 
