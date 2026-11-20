@@ -6,7 +6,12 @@ config:set_strict_mode(true)
 local project_dir = "D:/config/wezterm"
 local projects = "D:/projects"
 
-config.default_prog = { "pwsh.exe", "-NoLogo" }
+config.default_prog = {
+	"C:/Program Files/Git/bin/bash.exe",
+	"--rcfile",
+	"D:/config/bash/.bashrc",
+	"-i",
+}
 config.default_cwd = projects
 
 config.color_scheme = "Everforest Dark (Gogh)"
