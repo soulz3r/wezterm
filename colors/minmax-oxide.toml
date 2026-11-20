@@ -1,4 +1,5 @@
 # Minmax oxide color scheme for WezTerm.
+# Full source palette: base colors plus ANSI and indexed terminal colors.
 
 [colors]
 foreground = "#83b5a3"
@@ -8,9 +9,51 @@ cursor_border = "#b4d8c4"
 cursor_fg = "#090e0d"
 selection_bg = "#2d4943"
 selection_fg = "#b4d8c4"
+scrollbar_thumb = "#2d4943"
+split = "#2d4943"
+compose_cursor = "#e0ad83"
+visual_bell = "#cf7770"
 
-ansi = ["#090e0d", "#cf7770", "#628f7c", "#c58b67", "#496b61", "#c58b67", "#628f7c", "#83b5a3"]
-brights = ["#2d4943", "#cf7770", "#b4d8c4", "#e0ad83", "#628f7c", "#e0ad83", "#83b5a3", "#b4d8c4"]
+ansi = ["#090e0d", "#cf7770", "#628f7c", "#c58b67", "#496b61", "#a5b994", "#2d4943", "#83b5a3"]
+brights = ["#2d4943", "#cf7770", "#83b5a3", "#e0ad83", "#628f7c", "#a5b994", "#496b61", "#b4d8c4"]
+
+[colors.indexed]
+16 = "#090e0d"
+17 = "#83b5a3"
+18 = "#b4d8c4"
+19 = "#628f7c"
+20 = "#496b61"
+21 = "#2d4943"
+22 = "#c58b67"
+23 = "#e0ad83"
+24 = "#a5b994"
+25 = "#cf7770"
+
+[colors.tab_bar]
+background = "#090e0d"
+
+[colors.tab_bar.active_tab]
+bg_color = "#628f7c"
+fg_color = "#090e0d"
+intensity = "Bold"
+
+[colors.tab_bar.inactive_tab]
+bg_color = "#2d4943"
+fg_color = "#496b61"
+
+[colors.tab_bar.inactive_tab_hover]
+bg_color = "#496b61"
+fg_color = "#b4d8c4"
+italic = true
+
+[colors.tab_bar.new_tab]
+bg_color = "#090e0d"
+fg_color = "#628f7c"
+
+[colors.tab_bar.new_tab_hover]
+bg_color = "#c58b67"
+fg_color = "#090e0d"
+italic = true
 
 [metadata]
 name = "Minmax Oxide"
