@@ -1,0 +1,17 @@
+# Minmax mono color scheme for WezTerm.
+
+[colors]
+foreground = "#a6c5a8"
+background = "#080c09"
+cursor_bg = "#e0f0df"
+cursor_border = "#e0f0df"
+cursor_fg = "#080c09"
+selection_bg = "#354b3c"
+selection_fg = "#e0f0df"
+
+ansi = ["#080c09", "#c9827b", "#82a78a", "#c1d5c2", "#587360", "#c1d5c2", "#82a78a", "#a6c5a8"]
+brights = ["#354b3c", "#c9827b", "#e0f0df", "#eff8ee", "#82a78a", "#eff8ee", "#a6c5a8", "#e0f0df"]
+
+[metadata]
+name = "Minmax Mono"
+author = "soulz3r"
