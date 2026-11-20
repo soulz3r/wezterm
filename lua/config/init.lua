@@ -14,7 +14,36 @@ config.default_prog = {
 }
 config.default_cwd = projects
 
-config.color_scheme = "Everforest Dark (Gogh)"
+-- A restrained forest-green terminal palette.
+config.colors = {
+	foreground = "#c0d6b8",
+	background = "#0b120d",
+	cursor_bg = "#a8cf86",
+	cursor_fg = "#0b120d",
+	cursor_border = "#a8cf86",
+	selection_bg = "#29432f",
+	selection_fg = "#e0eed8",
+	ansi = {
+		"#18221a",
+		"#c06b62",
+		"#8eae78",
+		"#c4b879",
+		"#789b83",
+		"#a58b9e",
+		"#78a99b",
+		"#b7c9b1",
+	},
+	brights = {
+		"#344438",
+		"#d78378",
+		"#a8c98e",
+		"#d6c98c",
+		"#91b69c",
+		"#b99fb2",
+		"#91c2b3",
+		"#e0eadb",
+	},
+}
 config.window_decorations = "RESIZE"
 config.window_background_opacity = 0.85
 config.initial_cols = 100
