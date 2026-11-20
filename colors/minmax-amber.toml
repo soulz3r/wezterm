@@ -30,13 +30,6 @@ brights = ["#51402b", "#d97968", "#f2cf91", "#c5e39a", "#9fbd78", "#c9ae7a", "#b
 24 = "#c9ae7a"
 25 = "#d97968"
 
-# Green file-type colors: directory, executable, symlink, archive, image, media.
-26 = "#b9d77a"
-27 = "#8fb85a"
-28 = "#d2e2a5"
-29 = "#718d43"
-30 = "#a4c86b"
-31 = "#607b39"
 
 [colors.tab_bar]
 background = "#100c07"
