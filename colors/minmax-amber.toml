@@ -1,5 +1,6 @@
 # Minmax amber color scheme for WezTerm.
-# Full source palette: base colors plus ANSI and indexed terminal colors.
+# ANSI slots are intentionally separated by file-type and UI role.
+# Indexed colors 16-25 preserve the complete Minmax source palette.
 
 [colors]
 foreground = "#d6a45d"
@@ -14,8 +15,8 @@ split = "#51402b"
 compose_cursor = "#c5e39a"
 visual_bell = "#d97968"
 
-ansi = ["#100c07", "#d97968", "#b88748", "#9fbd78", "#80633c", "#c9ae7a", "#51402b", "#d6a45d"]
-brights = ["#51402b", "#d97968", "#d6a45d", "#c5e39a", "#b88748", "#c9ae7a", "#80633c", "#f2cf91"]
+ansi = ["#100c07", "#d97968", "#b88748", "#c5e39a", "#9fbd78", "#c9ae7a", "#f2cf91", "#d6a45d"]
+brights = ["#51402b", "#d97968", "#f2cf91", "#c5e39a", "#9fbd78", "#c9ae7a", "#b88748", "#f2cf91"]
 
 [colors.indexed]
 16 = "#100c07"
