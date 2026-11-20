@@ -1,0 +1,17 @@
+# Minmax oxide color scheme for WezTerm.
+
+[colors]
+foreground = "#83b5a3"
+background = "#090e0d"
+cursor_bg = "#b4d8c4"
+cursor_border = "#b4d8c4"
+cursor_fg = "#090e0d"
+selection_bg = "#2d4943"
+selection_fg = "#b4d8c4"
+
+ansi = ["#090e0d", "#cf7770", "#628f7c", "#c58b67", "#496b61", "#c58b67", "#628f7c", "#83b5a3"]
+brights = ["#2d4943", "#cf7770", "#b4d8c4", "#e0ad83", "#628f7c", "#e0ad83", "#83b5a3", "#b4d8c4"]
+
+[metadata]
+name = "Minmax Oxide"
+author = "soulz3r"
