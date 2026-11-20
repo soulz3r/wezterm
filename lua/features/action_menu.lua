@@ -9,7 +9,7 @@ local PROJECTS = "D:/projects"
 local DEFAULT_SCHEME = "Minmax Phosphor"
 local CUSTOM_SCHEMES = {
 	"Minmax Phosphor",
-	"Minmax mono",
+	"Minmax Mono",
 	"Minmax amber",
 	"Minmax oxide",
 }
