@@ -42,7 +42,7 @@ try {
         "--no-multi",
         "--cycle",
         "--ansi",
-        "--color", "fg:#d3c6aa,bg:#2d353b,hl:#a7c080,fg+:#d3c6aa,bg+:#3d484d,hl+:#a7c080,info:#a7c080,prompt:#e69875,pointer:#e67e80,marker:#a7c080,border:#475258"
+        "--color", "fg:#9acb78,bg:-1,hl:#d6a45d,fg+:#c4e6a0,bg+:-1,hl+:#efc477,info:#58734a,prompt:#d6a45d,pointer:#c4e6a0,marker:#79a85b,border:#344b32,gutter:-1"
     )
 
     $selected = $rows | & $fzf.Source @fzfArgs
