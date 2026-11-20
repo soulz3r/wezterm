@@ -1,0 +1,17 @@
+# Minmax phosphor color scheme for WezTerm.
+
+[colors]
+foreground = "#9acb78"
+background = "#090d08"
+cursor_bg = "#c4e6a0"
+cursor_border = "#c4e6a0"
+cursor_fg = "#090d08"
+selection_bg = "#344b32"
+selection_fg = "#c4e6a0"
+
+ansi = ["#090d08", "#d97968", "#79a85b", "#d6a45d", "#58734a", "#d6a45d", "#79a85b", "#9acb78"]
+brights = ["#344b32", "#d97968", "#c4e6a0", "#efc477", "#79a85b", "#efc477", "#9acb78", "#c4e6a0"]
+
+[metadata]
+name = "Minmax Phosphor"
+author = "soulz3r"
