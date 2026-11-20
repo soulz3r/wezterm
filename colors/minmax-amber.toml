@@ -1,0 +1,17 @@
+# Minmax amber color scheme for WezTerm.
+
+[colors]
+foreground = "#d6a45d"
+background = "#100c07"
+cursor_bg = "#f2cf91"
+cursor_border = "#f2cf91"
+cursor_fg = "#100c07"
+selection_bg = "#51402b"
+selection_fg = "#f2cf91"
+
+ansi = ["#100c07", "#d97968", "#b88748", "#9fbd78", "#80633c", "#9fbd78", "#b88748", "#d6a45d"]
+brights = ["#51402b", "#d97968", "#f2cf91", "#c5e39a", "#b88748", "#c5e39a", "#d6a45d", "#f2cf91"]
+
+[metadata]
+name = "Minmax Amber"
+author = "soulz3r"
