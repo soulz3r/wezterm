@@ -13,7 +13,7 @@ function M.build(window, mode)
 	local items = {}
 
 	local shells = {
-		{ name = "Git Bash", args = { "C:/Program Files/Git/bin/bash.exe", "--rcfile", "D:/config/bash/.bashrc", "-i" } },
+		{ name = "Git Bash", args = { "C:/Program Files/Git/bin/bash.exe", "--rcfile", "/d/config/bash/.bashrc", "-i" } },
 		{ name = "PowerShell", args = { "pwsh.exe", "-NoLogo" } },
 		{ name = "Command Prompt", args = { "cmd.exe" } },
 		{ name = "Arch Linux (WSL)", args = { "wsl.exe", "-d", "Arch" } },
