@@ -8,16 +8,13 @@ local M = {}
 local pending = {}
 
 local PROJECTS = "D:/projects"
-local DEFAULT_SCHEME = "Minmax Phosphor"
 local CUSTOM_SCHEMES = {
 	"Minmax Phosphor",
 	"Minmax Mono",
 	"Minmax Amber",
 	"Minmax Oxide",
 }
-local DEFAULT_OPACITY = 0.85
 
-local GIT_BASH_ARGS = shells.git_bash
 local SHELLS = shells.items
 
 local function notify(window, title, message, duration)
