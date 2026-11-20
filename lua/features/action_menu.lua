@@ -6,7 +6,7 @@ local M = {}
 local pending = {}
 
 local PROJECTS = "D:/projects"
-local DEFAULT_SCHEME = "Everforest Dark (Gogh)"
+local DEFAULT_SCHEME = "Minmax phosphor"
 local DEFAULT_OPACITY = 0.85
 
 local SHELLS = {
