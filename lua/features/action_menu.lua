@@ -148,13 +148,13 @@ local function set_override(window, key, value)
 end
 
 local function project_items(options)
-	local entries, err = pcall(wezterm.read_dir, options.projects)
-	if not entries then
-		error("Cannot read project directory " .. options.projects .. ": " .. tostring(err))
+	local ok, paths = pcall(wezterm.read_dir, options.projects)
+	if not ok then
+		error("Cannot read project directory " .. options.projects .. ": " .. tostring(paths))
 	end
 
 	local items = {}
-	for _, path in ipairs(err) do
+	for _, path in ipairs(paths) do
 		path = path:gsub("[/\\\\]+$", "")
 		local name = path:match("([^/\\\\]+)$")
 		if name and name:sub(1, 1) ~= "." then
