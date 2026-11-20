@@ -7,7 +7,6 @@ local shells = require("config.shells")
 local M = {}
 local pending = {}
 
-local PROJECTS = "D:/projects"
 local CUSTOM_SCHEMES = {
 	"Minmax Phosphor",
 	"Minmax Mono",
@@ -15,7 +14,6 @@ local CUSTOM_SCHEMES = {
 	"Minmax Oxide",
 }
 
-local SHELLS = shells.items
 
 local function notify(window, title, message, duration)
 	window:toast_notification(title, message, nil, duration or 2500)
@@ -220,7 +218,7 @@ end
 function M.setup(config, options)
 	options = options or {}
 	options.project_dir = assert(options.project_dir, "action_menu.setup requires project_dir")
-	options.projects = options.projects or PROJECTS
+	options.projects = assert(options.projects, "action_menu.setup requires projects")
 
 	wezterm.on("user-var-changed", function(window, menu_pane, name, value)
 		if name ~= "WEZTERM_MENU_ACTION" then return end
@@ -265,9 +263,9 @@ function M.setup(config, options)
 
 	local keys = {
 		{ key = "X", mods = "CTRL|SHIFT", action = act.DisableDefaultAssignment },
-		{ key = "P", mods = "CTRL|SHIFT", action = callback(function(w, p) open(w, p, registry.build(w, "all", SHELLS), options) end) },
+		{ key = "P", mods = "CTRL|SHIFT", action = callback(function(w, p) open(w, p, registry.build(w, "all", shells.items), options) end) },
 		{ key = "P", mods = "ALT|SHIFT", action = callback(function(w, p) open_projects(w, p, options) end) },
-		{ key = "L", mods = "ALT|SHIFT", action = callback(function(w, p) open(w, p, registry.build(w, "shells", SHELLS), options) end) },
+		{ key = "L", mods = "ALT|SHIFT", action = callback(function(w, p) open(w, p, registry.build(w, "shells", shells.items), options) end) },
 		{ key = "F", mods = "CTRL|SHIFT", action = callback(function(w, p) open_scrollback(w, p, options, false) end) },
 		{ key = "Space", mods = "CTRL|SHIFT", action = callback(function(w, p) open_scrollback(w, p, options, true) end) },
 		{ key = "S", mods = "ALT|SHIFT", action = callback(function(w, p) open(w, p, registry.cheatsheet(), options) end) },
