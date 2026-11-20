@@ -6,7 +6,7 @@ local M = {}
 local pending = {}
 
 local PROJECTS = "D:/projects"
-local DEFAULT_SCHEME = "Minmax phosphor"
+local DEFAULT_SCHEME = "Minmax Phosphor"
 local CUSTOM_SCHEMES = {
 	"Minmax phosphor",
 	"Minmax mono",
