@@ -20,7 +20,7 @@ A minimal Windows WezTerm setup with a searchable **fzf command palette**. The d
 - Project checkout at D:\config\wezterm
 - Working directory D:\projects
 
-The home-directory .wezterm.lua file loads this checkout. Update its project_dir if the repository moves. Git Bash is the default shell and uses `D:/config/bash/.bashrc`; the shell picker can still launch PowerShell, CMD or Arch WSL.
+The home-directory .wezterm.lua file loads this checkout. Update its project_dir if the repository moves. Git Bash is the default shell and uses `/d/config/bash/.bashrc`; the shell picker can still launch PowerShell, CMD or Arch WSL.
 
 ## Layout
 
