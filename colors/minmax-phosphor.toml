@@ -1,4 +1,5 @@
 # Minmax phosphor color scheme for WezTerm.
+# Full source palette: base colors plus ANSI and indexed terminal colors.
 
 [colors]
 foreground = "#9acb78"
@@ -8,9 +9,51 @@ cursor_border = "#c4e6a0"
 cursor_fg = "#090d08"
 selection_bg = "#344b32"
 selection_fg = "#c4e6a0"
+scrollbar_thumb = "#344b32"
+split = "#344b32"
+compose_cursor = "#efc477"
+visual_bell = "#d97968"
 
-ansi = ["#090d08", "#d97968", "#79a85b", "#d6a45d", "#58734a", "#d6a45d", "#79a85b", "#9acb78"]
-brights = ["#344b32", "#d97968", "#c4e6a0", "#efc477", "#79a85b", "#efc477", "#9acb78", "#c4e6a0"]
+ansi = ["#090d08", "#d97968", "#79a85b", "#d6a45d", "#58734a", "#b6bd78", "#344b32", "#9acb78"]
+brights = ["#344b32", "#d97968", "#9acb78", "#efc477", "#79a85b", "#b6bd78", "#58734a", "#c4e6a0"]
+
+[colors.indexed]
+16 = "#090d08"
+17 = "#9acb78"
+18 = "#c4e6a0"
+19 = "#79a85b"
+20 = "#58734a"
+21 = "#344b32"
+22 = "#d6a45d"
+23 = "#efc477"
+24 = "#b6bd78"
+25 = "#d97968"
+
+[colors.tab_bar]
+background = "#090d08"
+
+[colors.tab_bar.active_tab]
+bg_color = "#79a85b"
+fg_color = "#090d08"
+intensity = "Bold"
+
+[colors.tab_bar.inactive_tab]
+bg_color = "#344b32"
+fg_color = "#58734a"
+
+[colors.tab_bar.inactive_tab_hover]
+bg_color = "#58734a"
+fg_color = "#c4e6a0"
+italic = true
+
+[colors.tab_bar.new_tab]
+bg_color = "#090d08"
+fg_color = "#79a85b"
+
+[colors.tab_bar.new_tab_hover]
+bg_color = "#d6a45d"
+fg_color = "#090d08"
+italic = true
 
 [metadata]
 name = "Minmax Phosphor"
