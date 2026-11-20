@@ -15,8 +15,10 @@ local CUSTOM_SCHEMES = {
 }
 local DEFAULT_OPACITY = 0.85
 
+local GIT_BASH_ARGS = { "C:/Program Files/Git/bin/bash.exe", "--rcfile", "/d/config/bash/.bashrc", "-i" }
+
 local SHELLS = {
-	{ name = "Git Bash", args = { "C:/Program Files/Git/bin/bash.exe", "--rcfile", "/d/config/bash/.bashrc", "-i" } },
+	{ name = "Git Bash", args = GIT_BASH_ARGS },
 	{ name = "PowerShell", args = { "pwsh.exe", "-NoLogo" } },
 	{ name = "Command Prompt", args = { "cmd.exe" } },
 	{ name = "Arch Linux (WSL)", args = { "wsl.exe", "-d", "Arch" } },
@@ -235,7 +237,7 @@ local function dispatch(window, pane, id, options)
 	if result_index then return end
 
 	if id == "menu" then
-		open(window, pane, registry.build(window, "all"), options)
+		open(window, pane, registry.build(window, "all", SHELLS), options)
 		return
 	elseif id == "project:picker" then
 		open_projects(window, pane, options)
@@ -251,12 +253,12 @@ local function dispatch(window, pane, id, options)
 			name = "project-" .. name,
 			spawn = {
 				cwd = path,
-				args = { "C:/Program Files/Git/bin/bash.exe", "--rcfile", "/d/config/bash/.bashrc", "-i" },
+				args = GIT_BASH_ARGS,
 			},
 		}), pane)
 		return
 	elseif id == "shell-picker" then
-		open(window, pane, registry.build(window, "shells"), options)
+		open(window, pane, registry.build(window, "shells", SHELLS), options)
 		return
 	elseif id == "cheatsheet" then
 		open(window, pane, registry.cheatsheet(), options)
