@@ -1,6 +1,7 @@
 local wezterm = require("wezterm")
 local act = wezterm.action
 local registry = require("features.action_registry")
+local shells = require("config.shells")
 
 local M = {}
 local pending = {}
@@ -15,14 +16,8 @@ local CUSTOM_SCHEMES = {
 }
 local DEFAULT_OPACITY = 0.85
 
-local GIT_BASH_ARGS = { "C:/Program Files/Git/bin/bash.exe", "--rcfile", "/d/config/bash/.bashrc", "-i" }
-
-local SHELLS = {
-	{ name = "Git Bash", args = GIT_BASH_ARGS },
-	{ name = "PowerShell", args = { "pwsh.exe", "-NoLogo" } },
-	{ name = "Command Prompt", args = { "cmd.exe" } },
-	{ name = "Arch Linux (WSL)", args = { "wsl.exe", "-d", "Arch" } },
-}
+local GIT_BASH_ARGS = shells.git_bash
+local SHELLS = shells.items
 
 local function notify(window, title, message, duration)
 	window:toast_notification(title, message, nil, duration or 2500)
