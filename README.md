@@ -53,7 +53,7 @@ Minmax phosphor is the default terminal scheme. The four local schemes are loade
 
 | Scheme | Palette |
 | --- | --- |
-| `Minmax phosphor` | Phosphor green with amber accents |
+| `Minmax Phosphor` | Phosphor green with amber accents |
 | `Minmax mono` | Soft monochrome green |
 | `Minmax amber` | Warm amber with green details |
 | `Minmax oxide` | Muted teal with copper accents |
