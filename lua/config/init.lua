@@ -68,7 +68,7 @@ config.animation_fps = 60
 config.max_fps = 75
 
 -- Block by default; applications such as Vim can change the shape with DECSCUSR.
-config.default_cursor_style = "SteadyBlock"
+config.default_cursor_style = "BlinkingBar"
 config.cursor_blink_rate = 650
 config.cursor_blink_ease_in = "EaseInOut"
 config.cursor_blink_ease_out = "EaseInOut"
