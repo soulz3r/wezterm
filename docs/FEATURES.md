@@ -4,7 +4,7 @@ This document separates WezTerm's capabilities by how they should be controlled.
 
 ## Runtime actions exposed through fzf
 
-- Shell launch: PowerShell, Command Prompt and optional Arch WSL
+- Shell launch: Git Bash, PowerShell, Command Prompt and optional Arch WSL
 - Tabs: create, activate, move, close, rename and native navigator
 - Panes: split, select, zoom, close, rotate and resize
 - Search: native search, scrollback search and pattern-based Quick Select
