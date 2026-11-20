@@ -55,7 +55,7 @@ Minmax phosphor is the default terminal scheme. The four local schemes are loade
 | --- | --- |
 | `Minmax Phosphor` | Phosphor green with amber accents |
 | `Minmax Mono` | Soft monochrome green |
-| `Minmax amber` | Warm amber with green details |
+| `Minmax Amber` | Warm amber with green details |
 | `Minmax oxide` | Muted teal with copper accents |
 
 The fzf command palette uses the Minmax phosphor colors and keeps the terminal background transparent.
