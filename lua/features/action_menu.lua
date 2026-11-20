@@ -7,6 +7,12 @@ local pending = {}
 
 local PROJECTS = "D:/projects"
 local DEFAULT_SCHEME = "Minmax phosphor"
+local CUSTOM_SCHEMES = {
+	"Minmax phosphor",
+	"Minmax mono",
+	"Minmax amber",
+	"Minmax oxide",
+}
 local DEFAULT_OPACITY = 0.85
 
 local SHELLS = {
@@ -187,6 +193,7 @@ local function open_schemes(window, pane, options)
 	local schemes = wezterm.get_builtin_color_schemes()
 	local names = {}
 	for name in pairs(schemes) do table.insert(names, name) end
+	for _, name in ipairs(CUSTOM_SCHEMES) do table.insert(names, name) end
 	table.sort(names)
 
 	local items = {}
