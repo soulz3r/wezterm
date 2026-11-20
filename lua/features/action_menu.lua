@@ -10,7 +10,7 @@ local DEFAULT_SCHEME = "Everforest Dark (Gogh)"
 local DEFAULT_OPACITY = 0.85
 
 local SHELLS = {
-	{ name = "Git Bash", args = { "C:/Program Files/Git/bin/bash.exe", "--rcfile", "D:/config/bash/.bashrc", "-i" } },
+	{ name = "Git Bash", args = { "C:/Program Files/Git/bin/bash.exe", "--rcfile", "/d/config/bash/.bashrc", "-i" } },
 	{ name = "PowerShell", args = { "pwsh.exe", "-NoLogo" } },
 	{ name = "Command Prompt", args = { "cmd.exe" } },
 	{ name = "Arch Linux (WSL)", args = { "wsl.exe", "-d", "Arch" } },
@@ -244,7 +244,7 @@ local function dispatch(window, pane, id, options)
 			name = "project-" .. name,
 			spawn = {
 				cwd = path,
-				args = { "C:/Program Files/Git/bin/bash.exe", "--rcfile", "D:/config/bash/.bashrc", "-i" },
+				args = { "C:/Program Files/Git/bin/bash.exe", "--rcfile", "/d/config/bash/.bashrc", "-i" },
 			},
 		}), pane)
 		return
