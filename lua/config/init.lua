@@ -9,7 +9,7 @@ local projects = "D:/projects"
 config.default_prog = {
 	"C:/Program Files/Git/bin/bash.exe",
 	"--rcfile",
-	"D:/config/bash/.bashrc",
+	"/d/config/bash/.bashrc",
 	"-i",
 }
 config.default_cwd = projects
