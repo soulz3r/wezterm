@@ -1,17 +1,13 @@
 local wezterm = require("wezterm")
 local config = wezterm.config_builder()
+local shells = require("config.shells")
 
 config:set_strict_mode(true)
 
 local project_dir = "D:/config/wezterm"
 local projects = "D:/projects"
 
-config.default_prog = {
-	"C:/Program Files/Git/bin/bash.exe",
-	"--rcfile",
-	"/d/config/bash/.bashrc",
-	"-i",
-}
+config.default_prog = shells.git_bash
 config.default_cwd = projects
 
 -- Minmax terminal theme. The local schemes are also exposed in the
