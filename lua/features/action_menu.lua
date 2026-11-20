@@ -1,6 +1,7 @@
 local wezterm = require("wezterm")
 local act = wezterm.action
 local registry = require("features.action_registry")
+local dispatch = require("features.action_dispatch")
 local shells = require("config.shells")
 
 local M = {}
@@ -31,8 +32,10 @@ local function write_items(items)
 	end
 
 	local ok, write_err = pcall(function()
-		file:write(wezterm.json_encode(items))
-		file:close()
+		local written, err = file:write(wezterm.json_encode(items))
+		if not written then error(err) end
+		local closed, close_err = file:close()
+		if not closed then error(close_err) end
 	end)
 	if not ok then
 		pcall(function() file:close() end)
@@ -40,14 +43,6 @@ local function write_items(items)
 		error("Cannot write fzf menu data: " .. tostring(write_err))
 	end
 	return path
-end
-
-local function find_shell(name)
-	for _, shell in ipairs(SHELLS) do
-		if shell.name == name then
-			return shell
-		end
-	end
 end
 
 local function open(window, pane, items, options)
@@ -225,166 +220,6 @@ local function prompt(window, pane, title, callback)
 	}), pane)
 end
 
-local function dispatch(window, pane, id, options)
-	if not id or id == "cancel" then return end
-
-	local result_index = tonumber(id:match("^result:(%d+)$"))
-	if result_index then return end
-
-	if id == "menu" then
-		open(window, pane, registry.build(window, "all", SHELLS), options)
-		return
-	elseif id == "project:picker" then
-		open_projects(window, pane, options)
-		return
-	elseif id:match("^project:open:") then
-		local path = id:sub(14)
-		local name = path:gsub("[/\\\\]+$", ""):match("([^/\\\\]+)$")
-		if not name then
-			notify(window, "Project picker", "Invalid project path.")
-			return
-		end
-		window:perform_action(act.SwitchToWorkspace({
-			name = "project-" .. name,
-			spawn = {
-				cwd = path,
-				args = GIT_BASH_ARGS,
-			},
-		}), pane)
-		return
-	elseif id == "shell-picker" then
-		open(window, pane, registry.build(window, "shells", SHELLS), options)
-		return
-	elseif id == "cheatsheet" then
-		open(window, pane, registry.cheatsheet(), options)
-		return
-	elseif id == "scheme:picker" then
-		open_schemes(window, pane, options)
-		return
-	elseif id == "font:picker" then
-		open_fonts(window, pane, options)
-		return
-	elseif id == "search:fzf" or id == "search:quick" then
-		open_scrollback(window, pane, options, id == "search:quick")
-		return
-	end
-
-	local placement, shell_name = id:match("^shell:([^:]+):(.+)$")
-	if placement then
-		local shell = find_shell(shell_name)
-		if not shell then return end
-		local command = { args = shell.args, cwd = options.projects }
-		if placement == "tab" then
-			window:perform_action(act.SpawnCommandInNewTab(command), pane)
-		elseif placement == "window" then
-			window:perform_action(act.SpawnCommandInNewWindow(command), pane)
-		elseif placement == "split" then
-			window:perform_action(act.SplitPane({
-				direction = "Right",
-				size = { Percent = 50 },
-				command = command,
-			}), pane)
-		end
-		return
-	end
-
-	if id:match("^scheme:apply:") then
-		set_override(window, "color_scheme", id:sub(14))
-		return
-	elseif id == "scheme:default" then
-		set_override(window, "color_scheme", DEFAULT_SCHEME)
-		return
-	elseif id:match("^font:apply:") then
-		set_override(window, "font", wezterm.font(id:sub(12)))
-		return
-	elseif id == "appearance:opacity" then
-		local current = (window:get_config_overrides() or {}).window_background_opacity
-		set_override(window, "window_background_opacity", current == 1.0 and DEFAULT_OPACITY or 1.0)
-		return
-	elseif id == "appearance:tab-bar" then
-		local current = (window:get_config_overrides() or {}).enable_tab_bar
-		set_override(window, "enable_tab_bar", current ~= true)
-		return
-	elseif id == "appearance:scrollbar" then
-		local current = (window:get_config_overrides() or {}).enable_scroll_bar
-		set_override(window, "enable_scroll_bar", not (current == nil and false or current))
-		return
-	elseif id == "appearance:cursor" then
-		local current = (window:get_config_overrides() or {}).default_cursor_style or "BlinkingBar"
-		set_override(window, "default_cursor_style", current == "BlinkingBar" and "SteadyBar" or "BlinkingBar")
-		return
-	end
-
-	if id == "workspace:create" then
-		prompt(window, pane, "Create workspace", function(name)
-			window:perform_action(act.SwitchToWorkspace({ name = name }), pane)
-		end)
-		return
-	elseif id == "workspace:rename" then
-		prompt(window, pane, "Rename current workspace", function(name)
-			wezterm.mux.rename_workspace(wezterm.mux.get_active_workspace(), name)
-		end)
-		return
-	elseif id:match("^workspace:switch:") then
-		window:perform_action(act.SwitchToWorkspace({ name = id:sub(18) }), pane)
-		return
-	elseif id == "tab:rename" then
-		prompt(window, pane, "Rename current tab", function(name)
-			pane:tab():set_title(name)
-		end)
-		return
-	end
-
-	local direct = {
-		["tab:new"] = act.SpawnTab("CurrentPaneDomain"),
-		["tab:previous"] = act.ActivateTabRelative(-1),
-		["tab:next"] = act.ActivateTabRelative(1),
-		["tab:move-left"] = act.MoveTabRelative(-1),
-		["tab:move-right"] = act.MoveTabRelative(1),
-		["tab:close"] = act.CloseCurrentTab({ confirm = true }),
-		["tab:navigator"] = act.ShowTabNavigator,
-		["pane:split:right"] = act.SplitPane({ direction = "Right", size = { Percent = 50 } }),
-		["pane:split:down"] = act.SplitPane({ direction = "Bottom", size = { Percent = 50 } }),
-		["pane:select"] = act.PaneSelect,
-		["pane:zoom"] = act.TogglePaneZoomState,
-		["pane:close"] = act.CloseCurrentPane({ confirm = true }),
-		["search:native"] = act.Search({ CaseSensitiveString = "" }),
-		["copy-mode"] = act.ActivateCopyMode,
-		["clipboard:copy"] = act.CopyTo("Clipboard"),
-		["clipboard:paste"] = act.PasteFrom("Clipboard"),
-		["clipboard:clear"] = act.ClearSelection,
-		["scroll:top"] = act.ScrollToTop,
-		["scroll:bottom"] = act.ScrollToBottom,
-		["scroll:page-up"] = act.ScrollByPage(-1),
-		["scroll:page-down"] = act.ScrollByPage(1),
-		["scroll:clear"] = act.ClearScrollback("ScrollbackOnly"),
-		["font:increase"] = act.IncreaseFontSize,
-		["font:decrease"] = act.DecreaseFontSize,
-		["font:reset"] = act.ResetFontSize,
-		["window:fullscreen"] = act.ToggleFullScreen,
-		["debug"] = act.ShowDebugOverlay,
-		["config:reload"] = act.ReloadConfiguration,
-	}
-	local action = direct[id]
-	if action then
-		window:perform_action(action, pane)
-	elseif id:match("^tab:activate:") then
-		local index = tonumber(id:match("(%d+)$"))
-		if index then window:perform_action(act.ActivateTab(index - 1), pane) end
-	elseif id == "pane:rotate-clockwise" or id == "pane:rotate-counter-clockwise" then
-		if wezterm.has_action("RotatePanes") then
-			window:perform_action(act.RotatePanes(id == "pane:rotate-clockwise" and "Clockwise" or "CounterClockwise"), pane)
-		end
-	elseif id:match("^pane:resize:") then
-		local direction = id:match("([^:]+)$")
-		if wezterm.has_action("AdjustPaneSize") then
-			window:perform_action(act.AdjustPaneSize({ direction, 5 }), pane)
-		end
-	elseif id == "docs" then
-		wezterm.open_with("https://wezterm.org/")
-	end
-end
-
 function M.setup(config, options)
 	options = options or {}
 	options.project_dir = assert(options.project_dir, "action_menu.setup requires project_dir")
@@ -409,7 +244,16 @@ function M.setup(config, options)
 				window:copy_to_clipboard(selected, "Clipboard")
 				notify(window, "WezTerm fzf", "Copied: " .. selected, 1800)
 			else
-				dispatch(window, target, value, options)
+				dispatch.run(window, target, value, options, {
+					open = open,
+					open_projects = open_projects,
+					open_schemes = open_schemes,
+					open_fonts = open_fonts,
+					open_scrollback = open_scrollback,
+					set_override = set_override,
+					prompt = prompt,
+					notify = notify,
+				})
 			end
 		end)
 		if not ok then
@@ -424,9 +268,9 @@ function M.setup(config, options)
 
 	local keys = {
 		{ key = "X", mods = "CTRL|SHIFT", action = act.DisableDefaultAssignment },
-		{ key = "P", mods = "CTRL|SHIFT", action = callback(function(w, p) open(w, p, registry.build(w, "all"), options) end) },
+		{ key = "P", mods = "CTRL|SHIFT", action = callback(function(w, p) open(w, p, registry.build(w, "all", SHELLS), options) end) },
 		{ key = "P", mods = "ALT|SHIFT", action = callback(function(w, p) open_projects(w, p, options) end) },
-		{ key = "L", mods = "ALT|SHIFT", action = callback(function(w, p) open(w, p, registry.build(w, "shells"), options) end) },
+		{ key = "L", mods = "ALT|SHIFT", action = callback(function(w, p) open(w, p, registry.build(w, "shells", SHELLS), options) end) },
 		{ key = "F", mods = "CTRL|SHIFT", action = callback(function(w, p) open_scrollback(w, p, options, false) end) },
 		{ key = "Space", mods = "CTRL|SHIFT", action = callback(function(w, p) open_scrollback(w, p, options, true) end) },
 		{ key = "S", mods = "ALT|SHIFT", action = callback(function(w, p) open(w, p, registry.cheatsheet(), options) end) },
