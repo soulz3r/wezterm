@@ -14,7 +14,7 @@ This document separates WezTerm's capabilities by how they should be controlled.
 - Workspace switching, creation and rename
 - Fullscreen and debug overlay
 
-The action catalog is kept in lua/features/action_registry.lua. Dispatch and fzf lifecycle management live in lua/features/action_menu.lua.
+The action catalog lives in lua/features/action_registry.lua, action execution lives in lua/features/action_dispatch.lua, and fzf lifecycle management lives in lua/features/action_menu.lua.
 
 ## Static configuration
 
