@@ -10,7 +10,7 @@ local DEFAULT_SCHEME = "Minmax Phosphor"
 local CUSTOM_SCHEMES = {
 	"Minmax Phosphor",
 	"Minmax Mono",
-	"Minmax amber",
+	"Minmax Amber",
 	"Minmax oxide",
 }
 local DEFAULT_OPACITY = 0.85
