@@ -40,7 +40,8 @@ The home-directory .wezterm.lua file loads this checkout. Update its project_dir
     ├── lua/
     │   ├── config/
     │   │   ├── init.lua
-    │   │   └── mouse.lua
+    │   │   ├── mouse.lua
+    │   │   └── shells.lua
     │   └── features/
     │       ├── action_registry.lua
     │       └── action_menu.lua
