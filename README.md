@@ -1,13 +1,13 @@
 # WezTerm
 
-A minimal Windows WezTerm setup with a searchable **fzf command palette**. The default terminal starts Git Bash; interactive terminal controls live behind menus.
+A minimal WezTerm configuration with a searchable **fzf command palette**. Git Bash is the preferred Windows shell; interactive terminal controls live behind menus.
 
 ## Design
 
 - Keep the default window visually minimal.
 - Use Minmax phosphor by default, with four local Minmax variants available in the color-scheme picker.
 - Keep the WezTerm and fzf palettes visually consistent with minmax.nvim.
-- Use a bold green ANSI palette with no blue, cyan, or magenta hues.
+- Use the green-dominant Minmax terminal palettes: bold green for important UI and file types, amber for emphasis, and red for errors. No blue, cyan, or magenta hues.
 - Keep file-type colors on portable ANSI slots, using bold green for directories and executables.
 - The fzf palette follows the active Minmax variant, including after switching themes.
 - Put discoverable actions in fzf instead of filling the screen with buttons or tab bars.
@@ -25,7 +25,7 @@ A minimal Windows WezTerm setup with a searchable **fzf command palette**. The d
 - Project checkout at D:\config\wezterm
 - Working directory D:\projects
 
-The home-directory .wezterm.lua file loads this checkout. Update its project_dir if the repository moves. Git Bash is the default shell and uses `/d/config/bash/.bashrc`; the shell picker can still launch PowerShell, CMD or Arch WSL.
+The home-directory `.wezterm.lua` loads this checkout. Update its `project_dir` if the repository moves. On Windows, Git Bash is the preferred shell and loads `/d/config/bash/.bashrc`; the shell picker can also launch PowerShell, CMD, or the optional Arch WSL distribution. The fzf palette launcher currently requires PowerShell 7 (`pwsh.exe`) and `fzf.exe`.
 
 ## Layout
 
@@ -63,7 +63,7 @@ Minmax phosphor is the default terminal scheme. The four local schemes are loade
 | `Minmax Amber` | Warm amber with green details |
 | `Minmax Oxide` | Muted teal with copper accents |
 
-The fzf command palette automatically follows the active Minmax variant. Its selection surface, prompt, matches, pointer, marker and supporting UI use that variant's bold green palette. If a built-in WezTerm scheme is selected, the fzf palette falls back to Minmax phosphor.
+The fzf command palette automatically follows the active Minmax variant, including changes made through the color-scheme picker. Prompts, pointers, markers, and selected text use bold green; darker green is used for the selection surface. The variant's amber or copper accent is retained for matches and emphasis. If a built-in WezTerm scheme is selected, the fzf palette falls back to Minmax phosphor.
 
 ## Command palette
 
@@ -84,7 +84,7 @@ The fzf command palette automatically follows the active Minmax variant. Its sel
 | Configuration | Reload and open the official documentation |
 | Help | Searchable keymap guide |
 
-The fzf menu is opened in a temporary tab. The PowerShell helper reads a temporary JSON catalog and returns the selected ID through the WEZTERM_MENU_ACTION user variable. Lua closes the temporary tab and dispatches the selection to the original pane.
+The fzf menu is opened in a temporary tab. The PowerShell helper reads a temporary JSON catalog and returns the selected ID through the `WEZTERM_MENU_ACTION` user variable. Lua closes the temporary tab and dispatches the selection to the original pane. The active theme variant is passed to the helper through `WEZTERM_MINMAX_VARIANT`.
 
 Scrollback search copies the selected line. Quick Select copies the extracted match. These actions do not move the viewport to the source line.
 
@@ -99,8 +99,8 @@ Scrollback search copies the selected line. Quick Select copies the extracted ma
 | Ctrl+Shift+Space | fzf Quick Select |
 | Alt+Shift+S | Searchable keymap guide |
 | Alt+Shift+O | Color scheme picker |
-| Alt+Shift+D | Split right |
-| Alt+Shift+R | Split down |
+| Alt+Shift+D | Split horizontally (right) |
+| Alt+Shift+R | Split vertically (down) |
 | Alt+Shift+T | New tab |
 | Alt+Shift+W | Close tab |
 | Alt+Shift+C | Copy mode |
