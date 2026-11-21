@@ -1,6 +1,5 @@
 # Minmax mono color scheme for WezTerm.
-# ANSI slots are intentionally separated by file-type and UI role.
-# Indexed colors 16-25 preserve the complete Minmax source palette.
+# Uses the standard 16 ANSI slots without overwriting the 256-color cube.
 
 [colors]
 foreground = "#a6c5a8"
@@ -10,26 +9,13 @@ cursor_border = "#e0f0df"
 cursor_fg = "#080c09"
 selection_bg = "#354b3c"
 selection_fg = "#e0f0df"
-scrollbar_thumb = "#354b3c"
+scrollbar_thumb = "#587360"
 split = "#354b3c"
 compose_cursor = "#eff8ee"
 visual_bell = "#c9827b"
 
-ansi = ["#080c09", "#c9827b", "#82a78a", "#eff8ee", "#c1d5c2", "#9db8a1", "#e0f0df", "#a6c5a8"]
-brights = ["#354b3c", "#c9827b", "#e0f0df", "#eff8ee", "#c1d5c2", "#9db8a1", "#82a78a", "#e0f0df"]
-
-[colors.indexed]
-16 = "#080c09"
-17 = "#a6c5a8"
-18 = "#e0f0df"
-19 = "#82a78a"
-20 = "#587360"
-21 = "#354b3c"
-22 = "#c1d5c2"
-23 = "#eff8ee"
-24 = "#9db8a1"
-25 = "#c9827b"
-
+ansi = ["#080c09", "#c9827b", "#82a78a", "#c1d5c2", "#587360", "#9db8a1", "#354b3c", "#a6c5a8"]
+brights = ["#354b3c", "#c9827b", "#e0f0df", "#eff8ee", "#82a78a", "#9db8a1", "#587360", "#e0f0df"]
 
 [colors.tab_bar]
 background = "#080c09"
