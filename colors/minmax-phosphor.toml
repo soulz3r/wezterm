@@ -1,5 +1,5 @@
 # Minmax phosphor color scheme for WezTerm.
-# Uses conventional ANSI roles with distinct hue families; Minmax's ten semantic colors remain exposed at indexes 16-25 for LS_COLORS.
+# Uses conventional ANSI roles with distinct hue families; Minmax's ten semantic colors remain exposed at indexes 16-31 for LS_COLORS.
 
 [colors]
 foreground = "#9acb78"
@@ -28,6 +28,13 @@ brights = ["#344b32", "#ef9888", "#c4e6a0", "#efc477", "#a8bfdf", "#d5a9c4", "#a
 23 = "#efc477"
 24 = "#b6bd78"
 25 = "#d97968"
+
+26 = "#7896b8"
+27 = "#b887a8"
+28 = "#78b8b0"
+29 = "#a8bfdf"
+30 = "#d5a9c4"
+31 = "#a4d8cf"
 
 [colors.tab_bar]
 background = "#090d08"
