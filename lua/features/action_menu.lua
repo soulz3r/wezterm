@@ -14,7 +14,6 @@ local CUSTOM_SCHEMES = {
 	"Minmax Oxide",
 }
 
-
 local function notify(window, title, message, duration)
 	window:toast_notification(title, message, nil, duration or 2500)
 end
@@ -40,6 +39,16 @@ local function write_items(items)
 	return path
 end
 
+local function active_minmax_variant(window, options)
+	local overrides = window:get_config_overrides() or {}
+	local scheme = overrides.color_scheme or options.default_scheme or "Minmax Phosphor"
+	local variant = type(scheme) == "string" and scheme:lower():match("^minmax%s+(%w+)$")
+	if variant == "mono" or variant == "amber" or variant == "oxide" then
+		return variant
+	end
+	return "phosphor"
+end
+
 local function open(window, pane, items, options)
 	if #items == 0 then
 		notify(window, "WezTerm", "There are no available entries.")
@@ -58,7 +67,10 @@ local function open(window, pane, items, options)
 		return window:mux_window():spawn_tab({
 			cwd = options.projects,
 			args = { "pwsh.exe", "-NoLogo", "-NoProfile", "-File", script },
-			set_environment_variables = { WEZTERM_MENU_FILE = path },
+			set_environment_variables = {
+				WEZTERM_MENU_FILE = path,
+				WEZTERM_MINMAX_VARIANT = active_minmax_variant(window, options),
+			},
 		})
 	end)
 
@@ -219,6 +231,7 @@ function M.setup(config, options)
 	options = options or {}
 	options.project_dir = assert(options.project_dir, "action_menu.setup requires project_dir")
 	options.projects = assert(options.projects, "action_menu.setup requires projects")
+	options.default_scheme = config.color_scheme or "Minmax Phosphor"
 
 	wezterm.on("user-var-changed", function(window, menu_pane, name, value)
 		if name ~= "WEZTERM_MENU_ACTION" then return end
