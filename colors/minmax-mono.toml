@@ -1,5 +1,5 @@
 # Minmax mono color scheme for WezTerm.
-# Uses conventional ANSI roles with distinct hue families; Minmax's ten semantic colors remain exposed at indexes 16-31 for LS_COLORS.
+# Green-dominant ANSI palette. No blue, cyan, or magenta slots.
 
 [colors]
 foreground = "#a6c5a8"
@@ -14,8 +14,8 @@ split = "#354b3c"
 compose_cursor = "#eff8ee"
 visual_bell = "#c9827b"
 
-ansi = ["#080c09", "#c9827b", "#82a78a", "#c1b99b", "#8497a8", "#a58f9e", "#83aaa7", "#a6c5a8"]
-brights = ["#354b3c", "#e0a09a", "#e0f0df", "#eff0df", "#b4c8d8", "#cbb4c2", "#b0d0cb", "#e0f0df"]
+ansi = ["#080c09", "#c9827b", "#82a78a", "#c1b99b", "#587360", "#a6c5a8", "#83b39a", "#a6c5a8"]
+brights = ["#354b3c", "#e0a09a", "#e0f0df", "#eff0df", "#82a78a", "#d0e2d0", "#b0d0bc", "#e0f0df"]
 
 [colors.indexed]
 16 = "#080c09"
