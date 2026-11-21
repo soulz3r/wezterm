@@ -1,5 +1,5 @@
 # Minmax amber color scheme for WezTerm.
-# Uses the standard 16 ANSI slots with Minmax's ten semantic colors exposed at indexes 16-25 for LS_COLORS.
+# Uses conventional ANSI roles with distinct hue families; Minmax's ten semantic colors remain exposed at indexes 16-25 for LS_COLORS.
 
 [colors]
 foreground = "#d6a45d"
@@ -14,8 +14,8 @@ split = "#51402b"
 compose_cursor = "#c5e39a"
 visual_bell = "#d97968"
 
-ansi = ["#100c07", "#d97968", "#b88748", "#9fbd78", "#80633c", "#c9ae7a", "#51402b", "#d6a45d"]
-brights = ["#51402b", "#d97968", "#f2cf91", "#c5e39a", "#b88748", "#c9ae7a", "#80633c", "#f2cf91"]
+ansi = ["#100c07", "#d97968", "#9fbd78", "#d6a45d", "#7895b5", "#b57e83", "#78aaa4", "#d6a45d"]
+brights = ["#51402b", "#ee9a8d", "#c5e39a", "#f2cf91", "#a9bfdc", "#d5a0a0", "#a3d0c8", "#f2cf91"]
 
 [colors.indexed]
 16 = "#100c07"
