@@ -1,5 +1,5 @@
 # Minmax mono color scheme for WezTerm.
-# Uses the standard 16 ANSI slots without overwriting the 256-color cube.
+# Uses the standard 16 ANSI slots with Minmax's ten semantic colors exposed at indexes 16-25 for LS_COLORS.
 
 [colors]
 foreground = "#a6c5a8"
@@ -16,6 +16,18 @@ visual_bell = "#c9827b"
 
 ansi = ["#080c09", "#c9827b", "#82a78a", "#c1d5c2", "#587360", "#9db8a1", "#354b3c", "#a6c5a8"]
 brights = ["#354b3c", "#c9827b", "#e0f0df", "#eff8ee", "#82a78a", "#9db8a1", "#587360", "#e0f0df"]
+
+[colors.indexed]
+16 = "#080c09"
+17 = "#a6c5a8"
+18 = "#e0f0df"
+19 = "#82a78a"
+20 = "#587360"
+21 = "#354b3c"
+22 = "#c1d5c2"
+23 = "#eff8ee"
+24 = "#9db8a1"
+25 = "#c9827b"
 
 [colors.tab_bar]
 background = "#080c09"
