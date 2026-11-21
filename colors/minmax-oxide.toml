@@ -29,12 +29,6 @@ brights = ["#2d4943", "#e9948c", "#b4d8c4", "#e0ad83", "#a7c4d7", "#d0a4bc", "#a
 24 = "#a5b994"
 25 = "#cf7770"
 
-26 = "#789caf"
-27 = "#ad829c"
-28 = "#78b9b3"
-29 = "#a7c4d7"
-30 = "#d0a4bc"
-31 = "#a6d8ce"
 
 [colors.tab_bar]
 background = "#090e0d"
