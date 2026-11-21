@@ -7,6 +7,8 @@ A minimal Windows WezTerm setup with a searchable **fzf command palette**. The d
 - Keep the default window visually minimal.
 - Use Minmax phosphor by default, with four local Minmax variants available in the color-scheme picker.
 - Keep the WezTerm and fzf palettes visually consistent with minmax.nvim.
+- Give ANSI blue, magenta and cyan distinct supporting hues instead of reusing green shades.
+- Expose supporting hues at indexed colors 26-31 for the Bash `LS_COLORS` mapping.
 - The fzf palette follows the active Minmax variant, including after switching themes.
 - Put discoverable actions in fzf instead of filling the screen with buttons or tab bars.
 - Keep WezTerm's native actions native. Use Lua callbacks only where a native action cannot express the behavior.
