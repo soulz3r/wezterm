@@ -1,6 +1,5 @@
 # Minmax oxide color scheme for WezTerm.
-# ANSI slots are intentionally separated by file-type and UI role.
-# Indexed colors 16-25 preserve the complete Minmax source palette.
+# Uses the standard 16 ANSI slots without overwriting the 256-color cube.
 
 [colors]
 foreground = "#83b5a3"
@@ -10,26 +9,13 @@ cursor_border = "#b4d8c4"
 cursor_fg = "#090e0d"
 selection_bg = "#2d4943"
 selection_fg = "#b4d8c4"
-scrollbar_thumb = "#2d4943"
+scrollbar_thumb = "#496b61"
 split = "#2d4943"
 compose_cursor = "#e0ad83"
 visual_bell = "#cf7770"
 
-ansi = ["#090e0d", "#cf7770", "#628f7c", "#e0ad83", "#c58b67", "#a5b994", "#b4d8c4", "#83b5a3"]
-brights = ["#2d4943", "#cf7770", "#b4d8c4", "#e0ad83", "#c58b67", "#a5b994", "#628f7c", "#b4d8c4"]
-
-[colors.indexed]
-16 = "#090e0d"
-17 = "#83b5a3"
-18 = "#b4d8c4"
-19 = "#628f7c"
-20 = "#496b61"
-21 = "#2d4943"
-22 = "#c58b67"
-23 = "#e0ad83"
-24 = "#a5b994"
-25 = "#cf7770"
-
+ansi = ["#090e0d", "#cf7770", "#628f7c", "#c58b67", "#496b61", "#a5b994", "#2d4943", "#83b5a3"]
+brights = ["#2d4943", "#cf7770", "#b4d8c4", "#e0ad83", "#628f7c", "#a5b994", "#496b61", "#b4d8c4"]
 
 [colors.tab_bar]
 background = "#090e0d"
