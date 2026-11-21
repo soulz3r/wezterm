@@ -1,5 +1,5 @@
 # Minmax mono color scheme for WezTerm.
-# Uses conventional ANSI roles with distinct hue families; Minmax's ten semantic colors remain exposed at indexes 16-25 for LS_COLORS.
+# Uses conventional ANSI roles with distinct hue families; Minmax's ten semantic colors remain exposed at indexes 16-31 for LS_COLORS.
 
 [colors]
 foreground = "#a6c5a8"
@@ -28,6 +28,13 @@ brights = ["#354b3c", "#e0a09a", "#e0f0df", "#eff0df", "#b4c8d8", "#cbb4c2", "#b
 23 = "#eff8ee"
 24 = "#9db8a1"
 25 = "#c9827b"
+
+26 = "#8497a8"
+27 = "#a58f9e"
+28 = "#83aaa7"
+29 = "#b4c8d8"
+30 = "#cbb4c2"
+31 = "#b0d0cb"
 
 [colors.tab_bar]
 background = "#080c09"
