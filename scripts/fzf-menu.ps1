@@ -12,16 +12,16 @@ $variant = if ([string]::IsNullOrWhiteSpace($env:WEZTERM_MINMAX_VARIANT)) {
 
 $fzfColors = switch ($variant) {
     "mono" {
-        "fg:#a6c5a8,bg:-1,fg+:#e0f0df,bg+:#354b3c,hl:#c1d5c2,hl+:#eff8ee,info:#587360,prompt:#c1d5c2,pointer:#e0f0df,marker:#82a78a,spinner:#eff8ee,header:#82a78a,border:#587360,label:#82a78a,query:#e0f0df,gutter:-1"
+        "fg:#a6c5a8,bg:-1,fg+:#e0f0df,bg+:#354b3c,hl:#c1b99b,hl+:#eff0df,info:#8497a8,prompt:#c1b99b,pointer:#b0d0cb,marker:#82a78a,spinner:#cbb4c2,header:#8497a8,border:#587360,label:#83aaa7,query:#e0f0df,gutter:-1"
     }
     "amber" {
-        "fg:#d6a45d,bg:-1,fg+:#f2cf91,bg+:#51402b,hl:#9fbd78,hl+:#c5e39a,info:#80633c,prompt:#9fbd78,pointer:#f2cf91,marker:#b88748,spinner:#c5e39a,header:#b88748,border:#80633c,label:#b88748,query:#f2cf91,gutter:-1"
+        "fg:#d6a45d,bg:-1,fg+:#f2cf91,bg+:#51402b,hl:#d6a45d,hl+:#f2cf91,info:#7895b5,prompt:#d6a45d,pointer:#a3d0c8,marker:#9fbd78,spinner:#d5a0a0,header:#7895b5,border:#80633c,label:#78aaa4,query:#f2cf91,gutter:-1"
     }
     "oxide" {
-        "fg:#83b5a3,bg:-1,fg+:#b4d8c4,bg+:#2d4943,hl:#c58b67,hl+:#e0ad83,info:#496b61,prompt:#c58b67,pointer:#b4d8c4,marker:#628f7c,spinner:#e0ad83,header:#628f7c,border:#496b61,label:#628f7c,query:#b4d8c4,gutter:-1"
+        "fg:#83b5a3,bg:-1,fg+:#b4d8c4,bg+:#2d4943,hl:#c58b67,hl+:#e0ad83,info:#789caf,prompt:#c58b67,pointer:#a6d8ce,marker:#628f7c,spinner:#d0a4bc,header:#789caf,border:#496b61,label:#78b9b3,query:#b4d8c4,gutter:-1"
     }
     default {
-        "fg:#9acb78,bg:-1,fg+:#c4e6a0,bg+:#344b32,hl:#d6a45d,hl+:#efc477,info:#58734a,prompt:#d6a45d,pointer:#c4e6a0,marker:#79a85b,spinner:#efc477,header:#79a85b,border:#58734a,label:#79a85b,query:#c4e6a0,gutter:-1"
+        "fg:#9acb78,bg:-1,fg+:#c4e6a0,bg+:#344b32,hl:#d6a45d,hl+:#efc477,info:#7896b8,prompt:#d6a45d,pointer:#a4d8cf,marker:#79a85b,spinner:#d5a9c4,header:#7896b8,border:#58734a,label:#78b8b0,query:#c4e6a0,gutter:-1"
     }
 }
 
