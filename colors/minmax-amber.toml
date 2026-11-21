@@ -1,5 +1,5 @@
 # Minmax amber color scheme for WezTerm.
-# Uses conventional ANSI roles with distinct hue families; Minmax's ten semantic colors remain exposed at indexes 16-25 for LS_COLORS.
+# Uses conventional ANSI roles with distinct hue families; Minmax's ten semantic colors remain exposed at indexes 16-31 for LS_COLORS.
 
 [colors]
 foreground = "#d6a45d"
@@ -28,6 +28,13 @@ brights = ["#51402b", "#ee9a8d", "#c5e39a", "#f2cf91", "#a9bfdc", "#d5a0a0", "#a
 23 = "#c5e39a"
 24 = "#c9ae7a"
 25 = "#d97968"
+
+26 = "#7895b5"
+27 = "#b57e83"
+28 = "#78aaa4"
+29 = "#a9bfdc"
+30 = "#d5a0a0"
+31 = "#a3d0c8"
 
 [colors.tab_bar]
 background = "#100c07"
