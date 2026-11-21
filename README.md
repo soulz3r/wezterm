@@ -7,8 +7,8 @@ A minimal Windows WezTerm setup with a searchable **fzf command palette**. The d
 - Keep the default window visually minimal.
 - Use Minmax phosphor by default, with four local Minmax variants available in the color-scheme picker.
 - Keep the WezTerm and fzf palettes visually consistent with minmax.nvim.
-- Give ANSI blue, magenta and cyan distinct supporting hues instead of reusing green shades.
-- Keep file-type colors on conventional ANSI slots so the Bash `LS_COLORS` mapping also works in Termux.
+- Use a bold green ANSI palette with no blue, cyan, or magenta hues.
+- Keep file-type colors on portable ANSI slots, using bold green for directories and executables.
 - The fzf palette follows the active Minmax variant, including after switching themes.
 - Put discoverable actions in fzf instead of filling the screen with buttons or tab bars.
 - Keep WezTerm's native actions native. Use Lua callbacks only where a native action cannot express the behavior.
@@ -63,7 +63,7 @@ Minmax phosphor is the default terminal scheme. The four local schemes are loade
 | `Minmax Amber` | Warm amber with green details |
 | `Minmax Oxide` | Muted teal with copper accents |
 
-The fzf command palette automatically follows the active Minmax variant. Its selection surface, prompt, matches, pointer, marker and supporting UI use that variant's colors. If a built-in WezTerm scheme is selected, the fzf palette falls back to Minmax phosphor.
+The fzf command palette automatically follows the active Minmax variant. Its selection surface, prompt, matches, pointer, marker and supporting UI use that variant's bold green palette. If a built-in WezTerm scheme is selected, the fzf palette falls back to Minmax phosphor.
 
 ## Command palette
 
