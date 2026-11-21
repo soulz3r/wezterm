@@ -12,16 +12,16 @@ $variant = if ([string]::IsNullOrWhiteSpace($env:WEZTERM_MINMAX_VARIANT)) {
 
 $fzfColors = switch ($variant) {
     "mono" {
-        "fg:#a6c5a8,bg:-1,fg+:#e0f0df,bg+:#354b3c,hl:#c1b99b,hl+:#eff0df,info:#8497a8,prompt:#c1b99b,pointer:#b0d0cb,marker:#82a78a,spinner:#cbb4c2,header:#8497a8,border:#587360,label:#83aaa7,query:#e0f0df,gutter:-1"
+        "fg:#a6c5a8,bg:-1,fg+:#e0f0df,bg+:#354b3c,hl:bold:#c1b99b,hl+:bold:#eff0df,info:#e0f0df,prompt:bold:#e0f0df,pointer:bold:#e0f0df,marker:bold:#e0f0df,spinner:#a6c5a8,header:#a6c5a8,border:#587360,label:#a6c5a8,query:#e0f0df,gutter:-1"
     }
     "amber" {
-        "fg:#d6a45d,bg:-1,fg+:#f2cf91,bg+:#51402b,hl:#d6a45d,hl+:#f2cf91,info:#7895b5,prompt:#d6a45d,pointer:#a3d0c8,marker:#9fbd78,spinner:#d5a0a0,header:#7895b5,border:#80633c,label:#78aaa4,query:#f2cf91,gutter:-1"
+        "fg:#d6a45d,bg:-1,fg+:#f2cf91,bg+:#51402b,hl:bold:#d6a45d,hl+:bold:#f2cf91,info:#f2cf91,prompt:bold:#f2cf91,pointer:bold:#f2cf91,marker:bold:#f2cf91,spinner:#d6a45d,header:#d6a45d,border:#80633c,label:#d6a45d,query:#f2cf91,gutter:-1"
     }
     "oxide" {
-        "fg:#83b5a3,bg:-1,fg+:#b4d8c4,bg+:#2d4943,hl:#c58b67,hl+:#e0ad83,info:#789caf,prompt:#c58b67,pointer:#a6d8ce,marker:#628f7c,spinner:#d0a4bc,header:#789caf,border:#496b61,label:#78b9b3,query:#b4d8c4,gutter:-1"
+        "fg:#83b5a3,bg:-1,fg+:#b4d8c4,bg+:#2d4943,hl:bold:#c58b67,hl+:bold:#e0ad83,info:#b4d8c4,prompt:bold:#b4d8c4,pointer:bold:#b4d8c4,marker:bold:#b4d8c4,spinner:#83b5a3,header:#83b5a3,border:#496b61,label:#83b5a3,query:#b4d8c4,gutter:-1"
     }
     default {
-        "fg:#9acb78,bg:-1,fg+:#c4e6a0,bg+:#344b32,hl:#d6a45d,hl+:#efc477,info:#7896b8,prompt:#d6a45d,pointer:#a4d8cf,marker:#79a85b,spinner:#d5a9c4,header:#7896b8,border:#58734a,label:#78b8b0,query:#c4e6a0,gutter:-1"
+        "fg:#9acb78,bg:-1,fg+:#c4e6a0,bg+:#344b32,hl:bold:#d6a45d,hl+:bold:#efc477,info:#c4e6a0,prompt:bold:#c4e6a0,pointer:bold:#c4e6a0,marker:bold:#c4e6a0,spinner:#9acb78,header:#9acb78,border:#58734a,label:#9acb78,query:#c4e6a0,gutter:-1"
     }
 }
 
