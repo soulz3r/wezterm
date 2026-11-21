@@ -23,7 +23,7 @@ local direct = {
 	["tab:close"] = act.CloseCurrentTab({ confirm = true }),
 	["tab:navigator"] = act.ShowTabNavigator,
 	["pane:split:right"] = act.SplitPane({ direction = "Right", size = { Percent = 50 } }),
-	["pane:split:down"] = act.SplitPane({ direction = "Bottom", size = { Percent = 50 } }),
+	["pane:split:down"] = act.SplitPane({ direction = "Down", size = { Percent = 50 } }),
 	["pane:select"] = act.PaneSelect,
 	["pane:zoom"] = act.TogglePaneZoomState,
 	["pane:close"] = act.CloseCurrentPane({ confirm = true }),
