@@ -1,5 +1,5 @@
 # Minmax oxide color scheme for WezTerm.
-# Uses the standard 16 ANSI slots with Minmax's ten semantic colors exposed at indexes 16-25 for LS_COLORS.
+# Uses conventional ANSI roles with distinct hue families; Minmax's ten semantic colors remain exposed at indexes 16-25 for LS_COLORS.
 
 [colors]
 foreground = "#83b5a3"
@@ -14,8 +14,8 @@ split = "#2d4943"
 compose_cursor = "#e0ad83"
 visual_bell = "#cf7770"
 
-ansi = ["#090e0d", "#cf7770", "#628f7c", "#c58b67", "#496b61", "#a5b994", "#2d4943", "#83b5a3"]
-brights = ["#2d4943", "#cf7770", "#b4d8c4", "#e0ad83", "#628f7c", "#a5b994", "#496b61", "#b4d8c4"]
+ansi = ["#090e0d", "#cf7770", "#628f7c", "#c58b67", "#789caf", "#ad829c", "#78b9b3", "#83b5a3"]
+brights = ["#2d4943", "#e9948c", "#b4d8c4", "#e0ad83", "#a7c4d7", "#d0a4bc", "#a6d8ce", "#b4d8c4"]
 
 [colors.indexed]
 16 = "#090e0d"
