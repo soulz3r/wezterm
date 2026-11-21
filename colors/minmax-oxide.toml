@@ -1,5 +1,5 @@
 # Minmax oxide color scheme for WezTerm.
-# Uses conventional ANSI roles with distinct hue families; Minmax's ten semantic colors remain exposed at indexes 16-31 for LS_COLORS.
+# Green-dominant ANSI palette with copper emphasis. No blue, cyan, or magenta slots.
 
 [colors]
 foreground = "#83b5a3"
@@ -14,8 +14,8 @@ split = "#2d4943"
 compose_cursor = "#e0ad83"
 visual_bell = "#cf7770"
 
-ansi = ["#090e0d", "#cf7770", "#628f7c", "#c58b67", "#789caf", "#ad829c", "#78b9b3", "#83b5a3"]
-brights = ["#2d4943", "#e9948c", "#b4d8c4", "#e0ad83", "#a7c4d7", "#d0a4bc", "#a6d8ce", "#b4d8c4"]
+ansi = ["#090e0d", "#cf7770", "#628f7c", "#c58b67", "#405f50", "#83b5a3", "#72a98b", "#83b5a3"]
+brights = ["#2d4943", "#e9948c", "#b4d8c4", "#e0ad83", "#628f7c", "#c3dfce", "#a6d8b8", "#b4d8c4"]
 
 [colors.indexed]
 16 = "#090e0d"
